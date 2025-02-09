@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import Navbar from '@/components/header';
 import { Footer } from '@/components/footer';
 import { Analytics } from '@/components/analytics';
+import { Toaster } from 'react-hot-toast';
 
 const openSans = Open_Sans({ subsets: ['latin'] });
 
@@ -31,6 +32,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <Toaster />
           <Navbar />
           <main className="min-h-screen">
             {children}
