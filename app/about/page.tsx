@@ -25,26 +25,26 @@ const values = [
   },
 ]
 
-const team = [
-  {
-    name: 'Hallel Ojowuro',
-    role: 'CEO & Founder',
-    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80',
-    bio: 'With over 5 years of experience in software development and technology leadership.',
-  },
-  {
-    name: 'Maria Garcia',
-    role: 'CTO',
-    image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80',
-    bio: 'Expert in cloud architecture and emerging technologies with a passion for innovation.',
-  },
-  {
-    name: 'David Chen',
-    role: 'Lead Developer',
-    image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80',
-    bio: 'Full-stack developer specializing in scalable web applications and mobile development.',
-  },
-]
+// const team = [
+//   {
+//     name: 'Hallel Ojowuro',
+//     role: 'CEO & Founder',
+//     image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80',
+//     bio: 'With over 5 years of experience in software development and technology leadership.',
+//   },
+//   {
+//     name: 'Maria Garcia',
+//     role: 'CTO',
+//     image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80',
+//     bio: 'Expert in cloud architecture and emerging technologies with a passion for innovation.',
+//   },
+//   {
+//     name: 'David Chen',
+//     role: 'Lead Developer',
+//     image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80',
+//     bio: 'Full-stack developer specializing in scalable web applications and mobile development.',
+//   },
+// ]
 
 export default function About() {
   return (
@@ -63,7 +63,9 @@ export default function About() {
         <div className="relative max-w-7xl mx-auto px-6 text-center">
           <h1 className="text-white mb-6">About Cyberwizdev</h1>
           <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            We are a team of passionate developers, designers, and strategists dedicated to transforming businesses through innovative software solutions.
+            We are a team of passionate developers, designers, and strategists
+            dedicated to transforming businesses through innovative software
+            solutions.
           </p>
         </div>
       </section>
@@ -75,10 +77,15 @@ export default function About() {
             <div>
               <h2 className="mb-6">Our Journey</h2>
               <p className="text-gray-600 mb-4">
-                Founded in 2020, Cyberwizdev has grown from a small team of developers into a full-service software solutions company. Our commitment to excellence and innovation has helped us build lasting partnerships with clients across various industries.
+                Founded in 2020, Cyberwizdev has grown from a small team of
+                developers into a full-service software solutions company. Our
+                commitment to excellence and innovation has helped us build
+                lasting partnerships with clients across various industries.
               </p>
               <p className="text-gray-600">
-                Today, we continue to push the boundaries of what&quot;s possible in software development, helping businesses transform their digital presence and achieve their goals.
+                Today, we continue to push the boundaries of what&quot;s
+                possible in software development, helping businesses transform
+                their digital presence and achieve their goals.
               </p>
             </div>
             <div className="relative h-[400px]">
@@ -100,7 +107,8 @@ export default function About() {
           <div className="text-center mb-16">
             <h2 className="mb-4">Our Values</h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              These core values guide everything we do and help us deliver exceptional results for our clients.
+              These core values guide everything we do and help us deliver
+              exceptional results for our clients.
             </p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -126,7 +134,7 @@ export default function About() {
               Meet the talented individuals who make our success possible.
             </p>
           </div>
-          <div className="grid md:grid-cols-3 gap-8">
+          {/* <div className="grid md:grid-cols-3 gap-8">
             {team.map((member) => (
               <Card key={member.name} className="border-none shadow-lg overflow-hidden">
                 <div className="relative h-64">
@@ -145,9 +153,9 @@ export default function About() {
                 </CardContent>
               </Card>
             ))}
-          </div>
+          </div> */}
         </div>
       </section>
     </div>
-  )
+  );
 }
