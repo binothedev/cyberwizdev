@@ -30,7 +30,7 @@ const projects = [
     image:
       "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&q=80",
     tags: ["React", "Node.js", "PostgreSQL", "Docker"],
-    demoUrl: "#",
+    demoUrl: "https://health-care.pxxl.click",
     githubUrl: "https://github.com/hallel20/health-care",
   },
   {
@@ -40,7 +40,7 @@ const projects = [
     image:
       "https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&q=80",
     tags: ["ReactJS", "Vite", "Flask", "MariaDB", "Docker"],
-    demoUrl: "#",
+    demoUrl: "https://www.havenca.xyz",
     githubUrl: "https://github.com/hallel20/real-estate",
   },
 ];
