@@ -40,7 +40,7 @@ const projects = [
     image:
       "https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&q=80",
     tags: ["ReactJS", "Vite", "Flask", "MariaDB", "Docker"],
-    demoUrl: "https://www.havenca.xyz",
+    demoUrl: "https://stage.havenca.xyz",
     githubUrl: "https://github.com/hallel20/real-estate",
   },
 ];
