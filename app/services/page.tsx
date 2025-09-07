@@ -12,6 +12,20 @@ import {
   Headphones,
   ArrowRight,
 } from 'lucide-react'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: "Custom Software Development Services | CyberWizDev",
+  description:
+    "CyberWizDev offers a wide range of custom software development services, including web development, mobile app development, cloud solutions, and digital strategy consulting.",
+  keywords: [
+    "custom software development",
+    "web development",
+    "mobile app development",
+    "cloud solutions",
+    "digital strategy",
+  ],
+};
 
 const services = [
   {
@@ -28,6 +42,7 @@ const services = [
       'SEO Integration',
     ],
     image: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&q=80',
+    alt: 'A computer screen with code on it, representing web development services',
   },
   {
     id: 'mobile-apps',
@@ -43,6 +58,7 @@ const services = [
       'App Maintenance',
     ],
     image: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&q=80',
+    alt: 'A smartphone displaying a mobile application, representing mobile app development services',
   },
   {
     id: 'cloud-solutions',
@@ -58,6 +74,7 @@ const services = [
       'Infrastructure as Code',
     ],
     image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80',
+    alt: 'A network of servers in a data center, representing cloud solutions',
   },
   {
     id: 'consulting',
@@ -73,6 +90,7 @@ const services = [
       'Technology Roadmap',
     ],
     image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&q=80',
+    alt: 'A group of people discussing a business strategy, representing digital strategy consulting',
   },
 ]
 
@@ -95,14 +113,46 @@ const additionalServices = [
 ]
 
 export default function Services() {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Custom Software Development Services | CyberWizDev",
+    description:
+      "CyberWizDev offers a wide range of custom software development services, including web development, mobile app development, cloud solutions, and digital strategy consulting.",
+    url: "https://cyberwizdev.com.ng/services",
+    provider: {
+      "@type": "Organization",
+      name: "CyberWizDev",
+      url: "https://cyberwizdev.com.ng",
+      logo: "https://cyberwizdev.com.ng/logo.png",
+    },
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: "Software Development Services",
+      itemListElement: services.map((service) => ({
+        "@type": "Offer",
+        itemOffered: {
+          "@type": "Service",
+          name: service.title,
+          description: service.description,
+          url: `https://cyberwizdev.com.ng/services#${service.id}`,
+        },
+      })),
+    },
+  };
+
   return (
     <div className="pt-20">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Hero Section */}
       <section className="relative py-24 bg-gray-900">
         <div className="absolute inset-0 overflow-hidden">
           <Image
             src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80"
-            alt="Services background"
+            alt="A network of servers in a data center, representing our comprehensive software solutions"
             width={300}
             height={300}
             className="object-cover opacity-20"
@@ -149,7 +199,7 @@ export default function Services() {
                 <div className="relative h-[400px]">
                   <Image
                     src={service.image}
-                    alt={service.title}
+                    alt={service.alt}
                     width={300}
                     height={300}
                     className="object-cover rounded-lg"

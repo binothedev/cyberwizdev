@@ -1,5 +1,7 @@
 import Link from 'next/link'
 import { Code2, Facebook, Twitter, Linkedin, Github } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 
 const navigation = {
   solutions: [
@@ -106,6 +108,33 @@ export function Footer() {
                     </li>
                   ))}
                 </ul>
+              </div>
+              <div className="mt-10 md:mt-0">
+                <h3 className="text-sm font-semibold leading-6 text-white">
+                  Subscribe to our newsletter
+                </h3>
+                <p className="mt-2 text-sm leading-6 text-gray-300">
+                  Get the latest news, articles, and resources, sent to your inbox weekly.
+                </p>
+                <form className="mt-6 sm:flex sm:max-w-md">
+                  <label htmlFor="email-address" className="sr-only">
+                    Email address
+                  </label>
+                  <Input
+                    type="email"
+                    name="email-address"
+                    id="email-address"
+                    autoComplete="email"
+                    required
+                    className="w-full min-w-0 appearance-none rounded-md border-0 bg-white/5 px-3 py-1.5 text-base text-white shadow-sm ring-1 ring-inset ring-white/10 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-[#3498db] sm:w-64 sm:text-sm sm:leading-6 xl:w-full"
+                    placeholder="Enter your email"
+                  />
+                  <div className="mt-4 sm:ml-4 sm:mt-0 sm:flex-shrink-0">
+                    <Button type="submit" >
+                      Subscribe
+                    </Button>
+                  </div>
+                </form>
               </div>
             </div>
           </div>

@@ -1,7 +1,22 @@
-import Image from 'next/image'
-import { Card, CardContent } from '@/components/ui/card'
-import { MapPin, Phone, Mail, Clock } from 'lucide-react'
+import Image from 'next/image';
+import { Card, CardContent } from '@/components/ui/card';
+import { MapPin, Phone, Mail, Clock } from 'lucide-react';
 import ContactForm from '@/components/ContactForm';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Contact Us | CyberWizDev',
+  description:
+    'Get in touch with CyberWizDev for a free consultation on your next web development project. We offer custom software solutions, web design, and mobile app development.',
+  keywords:
+    [
+      'contact us',
+      'free consultation',
+      'custom software development',
+      'web design',
+      'mobile app development',
+    ],
+};
 
 const contactInfo = [
   {
@@ -24,18 +39,41 @@ const contactInfo = [
     title: 'Business Hours',
     content: 'Mon - Fri: 9:00 AM - 6:00 PM',
   },
-]
+];
 
 export default function Contact() {
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'ContactPage',
+    name: 'Contact Us | CyberWizDev',
+    description:
+      'Get in touch with CyberWizDev for a free consultation on your next web development project. We offer custom software solutions, web design, and mobile app development.',
+    url: 'https://cyberwizdev.com.ng/contact',
+    mainEntity: {
+      '@type': 'Organization',
+      name: 'CyberWizDev',
+      url: 'https://cyberwizdev.com.ng',
+      logo: 'https://cyberwizdev.com.ng/logo.png',
+      contactPoint: {
+        '@type': 'ContactPoint',
+        telephone: '+234-703-312-8149',
+        contactType: 'Customer Service',
+      },
+    },
+  };
 
   return (
     <div className="pt-20">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Hero Section */}
       <section className="relative py-24 bg-gray-900">
         <div className="absolute inset-0 overflow-hidden">
           <Image
             src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80"
-            alt="Contact background"
+            alt="An office building with a modern design, representing CyberWizDev\&#39;s headquarters"
             width={300}
             height={300}
             className="object-cover opacity-20"

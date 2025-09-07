@@ -3,8 +3,9 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Code2, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 
 const navigation = [
   { name: "Home", href: "/" },
@@ -16,9 +17,10 @@ const navigation = [
 
 function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
 
   return (
-    <header className="fixed w-full bg-white/80 backdrop-blur-md z-50 border-b">
+    <header className="fixed w-full bg-white/80 backdrop-blur-md z-50 border-b shadow-sm">
       <nav
         className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8"
         aria-label="Global"
@@ -52,7 +54,9 @@ function Header() {
             <Link
               key={item.name}
               href={item.href}
-              className="text-sm font-semibold leading-6 hover:text-[#3498db] transition-colors"
+              className={`text-sm font-semibold leading-6 hover:text-[#3498db] transition-colors ${
+                pathname === item.href ? "text-[#3498db]" : ""
+              }`}
             >
               {item.name}
             </Link>
@@ -68,7 +72,7 @@ function Header() {
         </Link>
       </nav>
       <nav
-        className={`md:hidden transition-all duration-500 ease ${
+        className={`md:hidden transition-all duration-500 ease-in-out ${
           mobileMenuOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0"
         } overflow-hidden`}
       >
@@ -78,7 +82,9 @@ function Header() {
               <Link
                 href={link.href}
                 onClick={() => setMobileMenuOpen((prev) => !prev)}
-                className="text-sm font-semibold leading-6 hover:text-[#3498db] transition-colors"
+                className={`text-sm font-semibold leading-6 hover:text-[#3498db] transition-colors ${
+                  pathname === link.href ? "text-[#3498db]" : ""
+                }`}
               >
                 {link.name}
               </Link>
