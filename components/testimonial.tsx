@@ -205,7 +205,7 @@ export function TestimonialSection({
             <div className="text-gray-300 text-sm">Average Rating</div>
           </div>
           <div className="text-center">
-            <div className="text-3xl font-bold text-white mb-2">150+</div>
+            <div className="text-3xl font-bold text-white mb-2">110+</div>
             <div className="text-gray-300 text-sm">Happy Clients</div>
           </div>
           <div className="text-center">

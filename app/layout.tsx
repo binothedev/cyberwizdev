@@ -6,7 +6,7 @@ import Header from "@/components/header";
 import { Footer } from "@/components/footer";
 import { Analytics } from "@/components/analytics";
 import { Toaster } from "react-hot-toast";
-import Wrapper from "@/components/ui/wrapper";
+import { LoadingProvider } from '@/components/LoadingContext';
 import ScrollToTop from "@/components/ui/scroll-to-top";
 import { Suspense } from "react";
 import Loader from "@/components/ui/loader";
@@ -55,6 +55,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <LoadingProvider>
           <Toaster />
           <Header />
           <main className="min-h-screen">
@@ -64,6 +65,7 @@ export default function RootLayout({
           <Footer />
           <ScrollToTop />
           <Analytics />
+          </LoadingProvider>
         </ThemeProvider>
       </body>
     </html>

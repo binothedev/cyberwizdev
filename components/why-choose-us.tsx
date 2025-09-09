@@ -26,7 +26,7 @@ const items = [
     description:
       "Senior developers with 8+ years experience in cutting-edge technologies and best practices.",
     icon: Users,
-    stat: "50+ Experts",
+    stat: "10+ Experts",
     color: "text-blue-500",
   },
   {

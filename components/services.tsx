@@ -37,7 +37,7 @@ const services: Service[] = [
     icon: Code2,
     features: ["React/Next.js", "Performance Optimized", "SEO Ready"],
     color: "from-blue-500 to-cyan-500",
-    projects: "150+",
+    projects: "110+",
     href: "/services/web-development",
   },
   {
