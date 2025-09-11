@@ -161,7 +161,7 @@ export default function Portfolio() {
       </section>
 
       {/* Featured Project */}
-      <section className="relative -mt-20 pb-16">
+      <section className="relative mt-20 pb-16">
         <div className="max-w-7xl mx-auto px-6">
           {projects.filter(p => p.featured).map((project) => (
             <Card key={project.title} className="group relative overflow-hidden border-0 shadow-2xl bg-white/90 backdrop-blur-sm hover:shadow-3xl transition-all duration-700">
