@@ -3,6 +3,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { MapPin, Phone, Mail, Clock, ArrowRight, Send } from 'lucide-react';
 import ContactForm from '@/components/ContactForm';
 import { Metadata } from 'next';
+import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'Contact Us | CyberWizDev',
@@ -107,14 +108,14 @@ export default function Contact() {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4">
-              <button className="group inline-flex items-center px-8 py-4 bg-[#3498db] text-white rounded-full font-semibold hover:bg-[#2980b9] transition-all duration-300 hover:shadow-xl hover:shadow-[#3498db]/25">
+              <a href="#form" className="group inline-flex items-center px-8 py-4 bg-[#3498db] text-white rounded-full font-semibold hover:bg-[#2980b9] transition-all duration-300 hover:shadow-xl hover:shadow-[#3498db]/25">
                 Schedule Free Consultation
                 <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-              </button>
+              </a>
               
-              <button className="inline-flex items-center px-8 py-4 bg-white/10 backdrop-blur-sm text-white rounded-full font-semibold border border-white/20 hover:bg-white/20 transition-all duration-300">
+              <Link href="/portfolio" className="inline-flex items-center px-8 py-4 bg-white/10 backdrop-blur-sm text-white rounded-full font-semibold border border-white/20 hover:bg-white/20 transition-all duration-300">
                 View Our Work
-              </button>
+              </Link>
             </div>
           </div>
         </div>
@@ -170,7 +171,7 @@ export default function Contact() {
           </div>
         </div>
         
-        <div className="relative max-w-7xl mx-auto px-6">
+        <div className="relative max-w-7xl mx-auto px-6" id="form">
           <div className="grid lg:grid-cols-2 gap-16 items-start">
             {/* Contact Form */}
             <div className="space-y-8">
