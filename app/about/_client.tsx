@@ -52,7 +52,7 @@ const team = [
     name: "Hallel Ojowuro",
     role: "CEO & Founder",
     image:
-      "https://res.cloudinary.com/dhwr83dss/image/upload/v1754749761/vettedhomes/y1omslvwr8rnaxynqcx2.jpg",
+      "/ceo.png",
     alt: "A portrait of Hallel Ojowuro, CEO and Founder of CyberWizDev",
     bio: "With over 5 years of experience in software development and technology leadership.",
     expertise: [
