@@ -3,7 +3,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { MapPin, Phone, Mail, Clock, ArrowRight, Send } from 'lucide-react';
 import ContactForm from '@/components/ContactForm';
 import { Metadata } from 'next';
-import Link from 'next/link';
+import Link from '@/components/link';
 
 export const metadata: Metadata = {
   title: 'Contact Us | CyberWizDev',
