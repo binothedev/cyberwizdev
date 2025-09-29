@@ -1,7 +1,7 @@
 "use server"
 
 import { ContactFormData } from "@/components/ContactForm";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@/prisma/prisma";
 import nodemailer from "nodemailer"
 
 const prisma = new PrismaClient();
