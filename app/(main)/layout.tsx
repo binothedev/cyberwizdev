@@ -1,11 +1,20 @@
+// app/layout.tsx
 import "./globals.css";
 import type { Metadata } from "next";
+import { Open_Sans } from "next/font/google";
+import { ThemeProvider } from "@/components/theme-provider";
 import Header from "@/components/header";
 import { Footer } from "@/components/footer";
 import { Analytics } from "@/components/analytics";
+import { Toaster } from "react-hot-toast";
+import { LoadingProvider } from '@/components/LoadingContext';
 import ScrollToTop from "@/components/ui/scroll-to-top";
 import { Suspense } from "react";
 import Loader from "@/components/ui/loader";
+import LiveChatWidget from "@/components/live-chat-widget";
+import WhatsAppButton from "@/components/whatsapp-button";
+
+const openSans = Open_Sans({ subsets: ["latin"], variable: "--font-sans" });
 
 export const metadata: Metadata = {
   title: {
@@ -38,14 +47,33 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <>
-      <Header />
-      <main className="min-h-screen">
-        <Suspense fallback={<Loader />}>{children}</Suspense>
-      </main>
-      <Footer />
-      <ScrollToTop />
-      <Analytics />
-    </>
+    <html lang="en" className="dark" style={{ colorScheme: "dark" }}>
+      <head>
+        <link rel="icon" href="/favicon.ico" />
+      </head>
+      <body className={`${openSans.variable} font-sans`}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <LoadingProvider>
+            <Toaster />
+            <Header />
+            <main className="min-h-screen">
+              <Suspense fallback={<Loader />}>
+                {children}
+              </Suspense>
+            </main>
+            <Footer />
+            <ScrollToTop />
+            <Analytics />
+            <LiveChatWidget />
+            <WhatsAppButton />
+          </LoadingProvider>
+        </ThemeProvider>
+      </body>
+    </html>
   );
 }
