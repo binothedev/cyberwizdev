@@ -1,10 +1,8 @@
 "use server"
 
 import { ContactFormData } from "@/components/ContactForm";
-import { PrismaClient } from "@/prisma/prisma";
+import { prisma } from "@/prisma/prisma";
 import nodemailer from "nodemailer"
-
-const prisma = new PrismaClient();
 
 export const contact = async (data: ContactFormData) => {
   const { name, phone, email, message } = data;
