@@ -30,8 +30,9 @@ export async function PATCH(
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const awaitedParams = await params
   try {
     const session = await auth();
     if (!session || session.user.role !== "admin") {
@@ -39,7 +40,7 @@ export async function DELETE(
     }
 
     await prisma.contact.delete({
-      where: { id: params.id },
+      where: { id: awaitedParams.id },
     });
 
     return NextResponse.json({ success: true });
