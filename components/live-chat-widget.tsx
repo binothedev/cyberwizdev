@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { MessageCircle, X, Send } from "lucide-react";
 import { toast } from "react-hot-toast";
+import { io, Socket } from "socket.io-client";
 
 interface Message {
   id: string;
@@ -23,42 +24,69 @@ export default function LiveChatWidget() {
   const [sessionId, setSessionId] = useState<string>("");
   const [userName, setUserName] = useState("");
   const [isStarted, setIsStarted] = useState(false);
+  const [isConnected, setIsConnected] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const socketRef = useRef<Socket | null>(null);
 
   useEffect(() => {
     const storedSessionId = localStorage.getItem("chatSessionId");
     if (storedSessionId) {
       setSessionId(storedSessionId);
       setIsStarted(true);
-      fetchMessages(storedSessionId);
+      initializeSocket(storedSessionId);
     }
-  }, []);
 
-  useEffect(() => {
-    if (isStarted && sessionId) {
-      const interval = setInterval(() => {
-        fetchMessages(sessionId);
-      }, 3000);
-      return () => clearInterval(interval);
-    }
-  }, [isStarted, sessionId]);
+    return () => {
+      if (socketRef.current) {
+        socketRef.current.disconnect();
+      }
+    };
+  }, []);
 
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  const initializeSocket = (sid: string) => {
+    if (socketRef.current) {
+      socketRef.current.disconnect();
+    }
+
+    // Initialize socket connection
+    socketRef.current = io(process.env.NODE_ENV === "production" ? "" : "http://localhost:3000", {
+      path: "/api/chat/socket",
+    });
+
+    const socket = socketRef.current;
+
+    socket.on("connect", () => {
+      console.log("Connected to WebSocket server");
+      setIsConnected(true);
+      // Join the chat session
+      socket.emit("join-chat", sid);
+    });
+
+    socket.on("disconnect", () => {
+      console.log("Disconnected from WebSocket server");
+      setIsConnected(false);
+    });
+
+    socket.on("chat-history", (chatMessages: Message[]) => {
+      setMessages(chatMessages);
+    });
+
+    socket.on("new-message", (newMessage: Message) => {
+      setMessages((prev) => [...prev, newMessage]);
+    });
+
+    socket.on("error", (error: { message: string }) => {
+      console.error("WebSocket error:", error);
+      toast.error(error.message || "Connection error");
+    });
   };
 
-  const fetchMessages = async (sid: string) => {
-    try {
-      const res = await fetch(`/api/chat/messages?sessionId=${sid}`);
-      const data = await res.json();
-      setMessages(data.messages || []);
-    } catch (error) {
-      console.error("Failed to fetch messages");
-    }
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   const startChat = async () => {
@@ -77,6 +105,7 @@ export default function LiveChatWidget() {
       setSessionId(data.sessionId);
       localStorage.setItem("chatSessionId", data.sessionId);
       setIsStarted(true);
+      initializeSocket(data.sessionId);
       toast.success("Chat started! We'll respond shortly.");
     } catch (error) {
       toast.error("Failed to start chat");
@@ -84,7 +113,7 @@ export default function LiveChatWidget() {
   };
 
   const sendMessage = async () => {
-    if (!input.trim()) return;
+    if (!input.trim() || !socketRef.current || !isConnected) return;
 
     const tempMessage = {
       id: Date.now().toString(),
@@ -97,16 +126,12 @@ export default function LiveChatWidget() {
     setInput("");
 
     try {
-      await fetch("/api/chat/send", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          sessionId,
-          message: input,
-          userName,
-        }),
+      // Send message via WebSocket
+      socketRef.current.emit("send-message", {
+        sessionId,
+        message: input,
+        userName,
       });
-      fetchMessages(sessionId);
     } catch (error) {
       toast.error("Failed to send message");
     }
@@ -126,19 +151,22 @@ export default function LiveChatWidget() {
 
       {isOpen && (
         <Card className="fixed bottom-6 right-6 w-96 h-[500px] shadow-2xl z-50 flex flex-col">
-          <div className="bg-primary text-primary-foreground p-4 rounded-t-lg flex items-center justify-between">
+          <div className="bg-primary text-gray-800 p-4 rounded-t-lg flex items-center justify-between">
             <div className="flex items-center gap-2">
               <MessageCircle className="h-5 w-5" />
               <div>
                 <h3 className="font-semibold">Live Chat</h3>
-                <p className="text-xs opacity-90">We typically reply in minutes</p>
+                <p className="text-xs opacity-90 flex items-center gap-2">
+                  <span className={`inline-block w-2 h-2 rounded-full ${isConnected ? 'bg-green-400' : 'bg-red-400'}`}></span>
+                  {isConnected ? 'Connected' : 'Connecting...'}
+                </p>
               </div>
             </div>
             <Button
               variant="ghost"
               size="icon"
               onClick={() => setIsOpen(false)}
-              className="text-primary-foreground hover:bg-primary-foreground/20"
+              className="text-gray-800 hover:bg-gray-800/20"
             >
               <X className="h-5 w-5" />
             </Button>
@@ -172,7 +200,7 @@ export default function LiveChatWidget() {
                     <div
                       className={`max-w-[75%] rounded-lg px-4 py-2 ${
                         msg.sender === "user"
-                          ? "bg-primary text-primary-foreground"
+                          ? "bg-primary text-gray-800"
                           : "bg-gray-200 dark:bg-gray-700"
                       }`}
                     >

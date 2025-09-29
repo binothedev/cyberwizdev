@@ -2,6 +2,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "react-hot-toast";
 import { LoadingProvider } from "@/components/LoadingContext";
 import { Open_Sans } from "next/font/google";
+import "./globals.css";
 
 const openSans = Open_Sans({ subsets: ["latin"], variable: "--font-sans" });
 

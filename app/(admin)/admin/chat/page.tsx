@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "react-hot-toast";
 import { Send, RefreshCw } from "lucide-react";
+import { io, Socket } from "socket.io-client";
 
 interface ChatSession {
   id: string;
@@ -33,25 +34,96 @@ export default function AdminChatPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [adminName, setAdminName] = useState("Admin");
+  const [isConnected, setIsConnected] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const socketRef = useRef<Socket | null>(null);
 
   useEffect(() => {
+    initializeSocket();
     fetchSessions();
-    const interval = setInterval(fetchSessions, 5000);
-    return () => clearInterval(interval);
+    
+    return () => {
+      if (socketRef.current) {
+        socketRef.current.disconnect();
+      }
+    };
   }, []);
 
   useEffect(() => {
-    if (selectedSession) {
+    if (selectedSession && socketRef.current) {
+      // Join the selected chat session
+      socketRef.current.emit("join-chat", selectedSession.id);
       fetchMessages(selectedSession.id);
-      const interval = setInterval(() => fetchMessages(selectedSession.id), 3000);
-      return () => clearInterval(interval);
     }
   }, [selectedSession]);
 
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  const initializeSocket = () => {
+    if (socketRef.current) {
+      socketRef.current.disconnect();
+    }
+
+    // Initialize socket connection
+    socketRef.current = io(process.env.NODE_ENV === "production" ? "" : "http://localhost:3000", {
+      path: "/api/chat/socket",
+    });
+
+    const socket = socketRef.current;
+
+    socket.on("connect", () => {
+      console.log("Admin connected to WebSocket server");
+      setIsConnected(true);
+      // Admin joins a general admin room
+      socket.emit("join-admin");
+    });
+
+    socket.on("disconnect", () => {
+      console.log("Admin disconnected from WebSocket server");
+      setIsConnected(false);
+    });
+
+    socket.on("new-session", (session: ChatSession) => {
+      setSessions((prev) => {
+        const exists = prev.find(s => s.id === session.id);
+        if (!exists) {
+          return [session, ...prev];
+        }
+        return prev;
+      });
+    });
+
+    socket.on("session-updated", (session: ChatSession) => {
+      setSessions((prev) => 
+        prev.map(s => s.id === session.id ? session : s)
+      );
+    });
+
+    socket.on("chat-history", (chatMessages: Message[]) => {
+      setMessages(chatMessages);
+    });
+
+    socket.on("new-message", (newMessage: Message) => {
+      if (selectedSession && newMessage.sender === "user") {
+        setMessages((prev) => [...prev, newMessage]);
+      }
+      // Update session last message
+      setSessions((prev) => 
+        prev.map(s => 
+          s.id === selectedSession?.id 
+            ? { ...s, lastMessage: newMessage.message, updatedAt: newMessage.createdAt }
+            : s
+        )
+      );
+    });
+
+    socket.on("error", (error: { message: string }) => {
+      console.error("WebSocket error:", error);
+      toast.error(error.message || "Connection error");
+    });
+  };
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -78,7 +150,7 @@ export default function AdminChatPage() {
   };
 
   const sendMessage = async () => {
-    if (!input.trim() || !selectedSession) return;
+    if (!input.trim() || !selectedSession || !socketRef.current || !isConnected) return;
 
     const tempMessage = {
       id: Date.now().toString(),
@@ -91,16 +163,12 @@ export default function AdminChatPage() {
     setInput("");
 
     try {
-      await fetch("/api/admin/chat/send", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          sessionId: selectedSession.id,
-          message: input,
-          senderName: adminName,
-        }),
+      // Send message via WebSocket
+      socketRef.current.emit("admin-message", {
+        sessionId: selectedSession.id,
+        message: input,
+        senderName: adminName,
       });
-      fetchMessages(selectedSession.id);
     } catch (error) {
       toast.error("Failed to send message");
     }
@@ -128,8 +196,12 @@ export default function AdminChatPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">Live Chat</h1>
-          <p className="text-gray-500 dark:text-gray-400 mt-2">
+          <p className="text-gray-500 dark:text-gray-400 mt-2 flex items-center gap-2">
             Chat with website visitors in real-time
+            <span className={`inline-flex items-center gap-1 text-xs px-2 py-1 rounded-full ${isConnected ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'}`}>
+              <span className={`inline-block w-2 h-2 rounded-full ${isConnected ? 'bg-green-500' : 'bg-red-500'}`}></span>
+              {isConnected ? 'Connected' : 'Disconnected'}
+            </span>
           </p>
         </div>
         <Button onClick={fetchSessions} variant="outline" className="gap-2">
@@ -216,7 +288,7 @@ export default function AdminChatPage() {
                     <div
                       className={`max-w-[75%] rounded-lg px-4 py-2 ${
                         msg.sender === "admin"
-                          ? "bg-primary text-primary-foreground"
+                          ? "bg-blue-700 text-primary-foreground"
                           : "bg-gray-200 dark:bg-gray-700"
                       }`}
                     >

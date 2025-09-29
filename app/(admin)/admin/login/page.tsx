@@ -2,13 +2,19 @@
 "use client";
 
 import { useState } from "react";
-import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { toast } from "react-hot-toast";
 import { Lock } from "lucide-react";
+import { login } from "./_action";
 
 export default function AdminLoginPage() {
   const [email, setEmail] = useState("");
@@ -21,10 +27,9 @@ export default function AdminLoginPage() {
     setLoading(true);
 
     try {
-      const result = await signIn("credentials", {
+      const result = await login({
         email,
         password,
-        redirect: false,
       });
 
       if (result?.error) {

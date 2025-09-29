@@ -17,7 +17,7 @@ interface AdminHeaderProps {
   user: {
     name?: string | null;
     email?: string | null;
-  };
+  } | undefined;
 }
 
 export default function AdminHeader({ user }: AdminHeaderProps) {
@@ -40,9 +40,9 @@ export default function AdminHeader({ user }: AdminHeaderProps) {
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="flex items-center gap-2">
                 <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white font-semibold">
-                  {user.name?.charAt(0).toUpperCase() || "A"}
+                  {user?.name?.charAt(0).toUpperCase() || "A"}
                 </div>
-                <span className="hidden md:inline">{user.name || "Admin"}</span>
+                <span className="hidden md:inline">{user?.name || "Admin"}</span>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56">

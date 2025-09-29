@@ -50,6 +50,7 @@ export default function NewsletterEditor({ content, setContent }: NewsletterEdit
         class: "prose prose-sm max-w-none focus:outline-none min-h-[400px] p-4",
       },
     },
+    immediatelyRender: false,
     onUpdate: ({ editor }) => {
       setContent(editor.getHTML());
     },
