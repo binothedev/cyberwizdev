@@ -5,8 +5,9 @@ import { auth } from "@/auth";
 
 export async function PATCH(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const awaitedParams = await params
   try {
     const session = await auth();
     if (!session || session.user.role !== "admin") {
@@ -16,7 +17,7 @@ export async function PATCH(
     const { status } = await req.json();
 
     await prisma.contact.update({
-      where: { id: params.id },
+      where: { id: awaitedParams.id },
       data: { status },
     });
 

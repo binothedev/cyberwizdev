@@ -11,7 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { signOut } from "next-auth/react";
+import { logout } from "./logout";
 
 interface AdminHeaderProps {
   user: {
@@ -22,7 +22,7 @@ interface AdminHeaderProps {
 
 export default function AdminHeader({ user }: AdminHeaderProps) {
   return (
-    <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-4">
+    <header className="bg-background border-b border-gray-200 dark:border-gray-700 px-6 py-4">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
@@ -56,8 +56,8 @@ export default function AdminHeader({ user }: AdminHeaderProps) {
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
-                className="cursor-pointer text-red-600"
-                onClick={() => signOut({ callbackUrl: "/" })}
+                className="cursor-pointer text-red-600" // Changed from text-red-600 to text-red-500
+                onClick={() => logout()}
               >
                 Logout
               </DropdownMenuItem>

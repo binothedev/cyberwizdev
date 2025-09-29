@@ -1,6 +1,7 @@
 // app/api/chat/send/route.ts
 import { NextResponse } from "next/server";
 import { prisma } from "@/prisma/prisma";
+import { sendLiveChatAlert } from "@/email/templates/liveChatAlert";
 
 export async function POST(req: Request) {
   try {
@@ -21,6 +22,13 @@ export async function POST(req: Request) {
         lastMessage: message,
         updatedAt: new Date(),
       },
+    });
+
+    sendLiveChatAlert(process.env.ADMIN_EMAIL!, {
+      visitorName: userName || "Visitor",
+      timestamp: new Date().toLocaleString(),
+      messageContent: message,
+      chatDashboardUrl: `${process.env.AUTH_URL}/admin/chat`,
     });
 
     return NextResponse.json({ success: true });

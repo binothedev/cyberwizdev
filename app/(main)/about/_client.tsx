@@ -12,7 +12,7 @@ import {
   TrendingUp,
   Heart,
 } from "lucide-react";
-import Link from "next/link";
+import Link from "@/components/link";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 
@@ -139,7 +139,7 @@ export default function AboutPageClient() {
           <div className="inline-block mb-6 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-white/90 text-sm font-medium border border-white/20">
             Transforming Ideas into Digital Reality
           </div>
-          <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white to-blue-200">
+          <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 bg-clip-text bg-gradient-to-r from-white to-blue-200">
             About CyberWizDev
           </h1>
           <p className="text-xl md:text-2xl text-gray-200 max-w-4xl mx-auto leading-relaxed">
@@ -157,7 +157,7 @@ export default function AboutPageClient() {
             <Button
               variant="outline"
               size="lg"
-              className="border-white/30 text-black hover:text-white hover:bg-white/10 px-8 py-4 text-lg"
+              className="border-white/30 hover:text-white hover:bg-white/10 px-8 py-4 text-lg"
             >
               Meet Our Team
             </Button>
@@ -201,7 +201,7 @@ export default function AboutPageClient() {
       <section className="py-24 bg-gradient-to-br from-gray-50 to-blue-50">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-blue-600">
+            <h2 className="text-4xl font-bold mb-6">
               Our Journey
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
@@ -262,7 +262,7 @@ export default function AboutPageClient() {
       <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-6">Our Core Values</h2>
+            <h2 className="text-4xl font-bold text-primary mb-6">Our Core Values</h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               These fundamental principles guide our decisions, shape our
               culture, and drive us to deliver exceptional results.

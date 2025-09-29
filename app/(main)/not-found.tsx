@@ -1,6 +1,6 @@
 // pages/404.tsx
 
-import Link from "next/link";
+import Link from "@/components/link";
 
 const NotFound = () => {
   return (

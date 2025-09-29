@@ -184,7 +184,7 @@ export default function Portfolio() {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
                 </div>
                 
-                <CardContent className="p-12 flex flex-col justify-center">
+                <CardContent className="sm:p-12 p-3 flex flex-col justify-center">
                   <h2 className="text-3xl font-bold text-slate-800 mb-4 group-hover:text-[#3498db] transition-colors">
                     {project.title}
                   </h2>

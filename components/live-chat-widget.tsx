@@ -1,7 +1,7 @@
 // components/live-chat-widget.tsx
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
@@ -12,8 +12,8 @@ import { io, Socket } from "socket.io-client";
 interface Message {
   id: string;
   message: string;
-  sender: string;
-  senderName: string | null;
+  sender: "user" | "admin";
+  senderName?: string | null;
   createdAt: string;
 }
 
@@ -25,75 +25,62 @@ export default function LiveChatWidget() {
   const [userName, setUserName] = useState("");
   const [isStarted, setIsStarted] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
+  const [isSending, setIsSending] = useState(false);
+
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const socketRef = useRef<Socket | null>(null);
 
+  // Scroll to bottom when messages change
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  // Restore session from localStorage
+  // @ts-ignore
   useEffect(() => {
     const storedSessionId = localStorage.getItem("chatSessionId");
     if (storedSessionId) {
       setSessionId(storedSessionId);
       setIsStarted(true);
-      initializeSocket(storedSessionId);
+      initSocket(storedSessionId);
     }
-
-    return () => {
-      if (socketRef.current) {
-        socketRef.current.disconnect();
-      }
-    };
+    return () => socketRef.current?.disconnect();
   }, []);
 
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
+  const initSocket = (sid: string) => {
+    socketRef.current?.disconnect();
 
-  const initializeSocket = (sid: string) => {
-    if (socketRef.current) {
-      socketRef.current.disconnect();
-    }
+    const socket = io(
+      process.env.NODE_ENV === "production"
+        ? ""
+        : "http://localhost:3000",
+      { path: "/api/chat/socket" }
+    );
 
-    // Initialize socket connection
-    socketRef.current = io(process.env.NODE_ENV === "production" ? "" : "http://localhost:3000", {
-      path: "/api/chat/socket",
-    });
-
-    const socket = socketRef.current;
+    socketRef.current = socket;
 
     socket.on("connect", () => {
-      console.log("Connected to WebSocket server");
       setIsConnected(true);
-      // Join the chat session
       socket.emit("join-chat", sid);
     });
 
-    socket.on("disconnect", () => {
-      console.log("Disconnected from WebSocket server");
-      setIsConnected(false);
-    });
+    socket.on("disconnect", () => setIsConnected(false));
 
-    socket.on("chat-history", (chatMessages: Message[]) => {
-      setMessages(chatMessages);
-    });
+    socket.on("chat-history", (chatMessages: Message[]) =>
+      setMessages(chatMessages)
+    );
 
-    socket.on("new-message", (newMessage: Message) => {
-      setMessages((prev) => [...prev, newMessage]);
-    });
+    socket.on("new-message", (newMessage: Message) =>
+      setMessages((prev) => [...prev, newMessage])
+    );
 
-    socket.on("error", (error: { message: string }) => {
-      console.error("WebSocket error:", error);
-      toast.error(error.message || "Connection error");
+    socket.on("error", (err: { message: string }) => {
+      toast.error(err.message || "Connection error");
     });
   };
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  const startChat = async () => {
-    if (!userName.trim()) {
-      toast.error("Please enter your name");
-      return;
-    }
+  const startChat = useCallback(async () => {
+    if (!userName.trim()) return toast.error("Please enter your name");
 
     try {
       const res = await fetch("/api/chat/start", {
@@ -105,44 +92,48 @@ export default function LiveChatWidget() {
       setSessionId(data.sessionId);
       localStorage.setItem("chatSessionId", data.sessionId);
       setIsStarted(true);
-      initializeSocket(data.sessionId);
-      toast.success("Chat started! We'll respond shortly.");
-    } catch (error) {
+      initSocket(data.sessionId);
+      toast.success("Chat started!");
+    } catch {
       toast.error("Failed to start chat");
     }
-  };
+  }, [userName]);
 
-  const sendMessage = async () => {
+  const sendMessage = useCallback(async () => {
     if (!input.trim() || !socketRef.current || !isConnected) return;
 
-    const tempMessage = {
+    const message: Message = {
       id: Date.now().toString(),
       message: input,
       sender: "user",
       senderName: userName,
       createdAt: new Date().toISOString(),
     };
-    setMessages((prev) => [...prev, tempMessage]);
+
+    setMessages((prev) => [...prev, message]);
     setInput("");
+    setIsSending(true);
 
     try {
-      // Send message via WebSocket
       socketRef.current.emit("send-message", {
         sessionId,
-        message: input,
+        message: message.message,
         userName,
       });
-    } catch (error) {
+    } catch {
       toast.error("Failed to send message");
+    } finally {
+      setIsSending(false);
     }
-  };
+  }, [input, isConnected, sessionId, userName]);
 
   return (
     <>
       {!isOpen && (
         <Button
+          aria-label="Open chat"
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-lg z-50"
+          className="fixed bottom-10 right-6 h-14 w-14 rounded-full shadow-lg z-50 bg-primary text-white"
           size="icon"
         >
           <MessageCircle className="h-6 w-6" />
@@ -150,33 +141,40 @@ export default function LiveChatWidget() {
       )}
 
       {isOpen && (
-        <Card className="fixed bottom-6 right-6 w-96 h-[500px] shadow-2xl z-50 flex flex-col">
-          <div className="bg-primary text-gray-800 p-4 rounded-t-lg flex items-center justify-between">
+        <Card className="fixed bottom-6 right-6 w-96 h-[500px] shadow-2xl z-50 flex flex-col bg-white">
+          {/* Header */}
+          <div className="bg-primary text-white p-4 rounded-t-lg flex items-center justify-between">
             <div className="flex items-center gap-2">
               <MessageCircle className="h-5 w-5" />
               <div>
                 <h3 className="font-semibold">Live Chat</h3>
-                <p className="text-xs opacity-90 flex items-center gap-2">
-                  <span className={`inline-block w-2 h-2 rounded-full ${isConnected ? 'bg-green-400' : 'bg-red-400'}`}></span>
-                  {isConnected ? 'Connected' : 'Connecting...'}
+                <p className="text-xs flex items-center gap-2">
+                  <span
+                    className={`inline-block w-2 h-2 rounded-full ${
+                      isConnected ? "bg-green-400" : "bg-red-400"
+                    }`}
+                  />
+                  {isConnected ? "Connected" : "Connecting..."}
                 </p>
               </div>
             </div>
             <Button
+              aria-label="Close chat"
               variant="ghost"
               size="icon"
               onClick={() => setIsOpen(false)}
-              className="text-gray-800 hover:bg-gray-800/20"
+              className="text-white hover:bg-white/20"
             >
               <X className="h-5 w-5" />
             </Button>
           </div>
 
+          {/* Body */}
           {!isStarted ? (
             <div className="flex-1 p-6 flex flex-col justify-center">
               <h4 className="font-semibold text-lg mb-2">Start a conversation</h4>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-                Enter your name to begin chatting with our team
+              <p className="text-sm text-gray-500 mb-4">
+                Enter your name to begin chatting
               </p>
               <Input
                 placeholder="Your name..."
@@ -195,17 +193,23 @@ export default function LiveChatWidget() {
                 {messages.map((msg) => (
                   <div
                     key={msg.id}
-                    className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}
+                    className={`flex ${
+                      msg.sender === "user"
+                        ? "justify-end"
+                        : "justify-start"
+                    } animate-fadeIn`}
                   >
                     <div
                       className={`max-w-[75%] rounded-lg px-4 py-2 ${
                         msg.sender === "user"
-                          ? "bg-primary text-gray-800"
-                          : "bg-gray-200 dark:bg-gray-700"
+                          ? "bg-primary text-white"
+                          : "bg-gray-100 text-primary"
                       }`}
                     >
                       {msg.sender === "admin" && msg.senderName && (
-                        <p className="text-xs font-semibold mb-1">{msg.senderName}</p>
+                        <p className="text-xs font-semibold mb-1">
+                          {msg.senderName}
+                        </p>
                       )}
                       <p className="text-sm whitespace-pre-wrap">{msg.message}</p>
                       <p className="text-xs opacity-70 mt-1">
@@ -220,15 +224,22 @@ export default function LiveChatWidget() {
                 <div ref={messagesEndRef} />
               </div>
 
-              <div className="p-4 border-t border-gray-200 dark:border-gray-700">
+              {/* Input */}
+              <div className="p-4 border-t border-gray-200">
                 <div className="flex gap-2">
                   <Input
                     placeholder="Type your message..."
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+                    disabled={isSending}
                   />
-                  <Button onClick={sendMessage} size="icon">
+                  <Button
+                    aria-label="Send message"
+                    onClick={sendMessage}
+                    size="icon"
+                    disabled={isSending}
+                  >
                     <Send className="h-4 w-4" />
                   </Button>
                 </div>

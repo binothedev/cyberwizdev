@@ -86,21 +86,6 @@ export function Footer() {
   const [loading, setLoading] = useState(false)
   const [email, setEmail] = useState("")
   const [subscribed, setSubscribed] = useState(false)
-  const [showBackToTop, setShowBackToTop] = useState(false)
-
-  // Back to top functionality
-  useEffect(() => {
-    const handleScroll = () => {
-      setShowBackToTop(window.scrollY > 400)
-    }
-    
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
-
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }
 
   // Email validation
   const isValidEmail = (email: string) => {
@@ -339,17 +324,6 @@ export function Footer() {
           </div>
         </div>
       </footer>
-
-      {/* Back to Top Button */}
-      {showBackToTop && (
-        <button
-          onClick={scrollToTop}
-          className="fixed bottom-8 right-8 z-50 p-3 bg-[#3498db] hover:bg-[#2980b9] text-white rounded-full shadow-lg transition-all duration-300 transform hover:scale-110 focus:scale-110 focus:outline-none focus:ring-2 focus:ring-[#3498db]/50"
-          aria-label="Back to top"
-        >
-          <ArrowUp className="h-5 w-5" />
-        </button>
-      )}
     </>
   )
 }

@@ -20,7 +20,7 @@ function Header() {
   const pathname = usePathname();
 
   return (
-    <header className="fixed w-full bg-white/80 backdrop-blur-md z-50 border-b shadow-sm">
+    <header className="fixed w-full bg-background/70 backdrop-blur-md z-50 border-b shadow-sm">
       <nav
         className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8"
         aria-label="Global"
@@ -72,7 +72,7 @@ function Header() {
         </Link>
       </nav>
       <nav
-        className={`md:hidden transition-all duration-500 ease-in-out ${
+        className={`lg:hidden transition-all duration-500 ease-in-out ${
           mobileMenuOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0"
         } overflow-hidden`}
       >

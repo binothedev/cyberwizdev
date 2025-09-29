@@ -246,7 +246,7 @@ export default function ContactsPage() {
       </Card>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="max-w-2xl">
+        <DialogContent className="max-w-2xl bg-gray-50 dark:bg-gray-900">
           <DialogHeader>
             <DialogTitle>Contact Submission Details</DialogTitle>
             <DialogDescription>

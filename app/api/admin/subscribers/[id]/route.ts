@@ -5,8 +5,9 @@ import { auth } from "@/auth";
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const awaitedParams = await params;
   try {
     const session = await auth();
     if (!session || session.user.role !== "admin") {
@@ -14,12 +15,15 @@ export async function DELETE(
     }
 
     await prisma.newsletterSubscription.delete({
-      where: { id: params.id },
+      where: { id: awaitedParams.id },
     });
 
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Delete subscriber error:", error);
-    return NextResponse.json({ error: "Failed to delete subscriber" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to delete subscriber" },
+      { status: 500 }
+    );
   }
 }

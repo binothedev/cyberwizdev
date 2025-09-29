@@ -12,11 +12,13 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { toast } from "react-hot-toast";
-import { Send } from "lucide-react";
+import { Code, Send } from "lucide-react";
 import NewsletterEditor from "@/components/admin/newsletter-editor";
+import { Textarea } from "@/components/ui/textarea";
 
 export default function NewsletterPage() {
   const [sending, setSending] = useState(false);
+  const [isRaw, setIsRaw] = useState(false);
   const [subject, setSubject] = useState("");
   const [content, setContent] = useState("");
 
@@ -84,7 +86,34 @@ export default function NewsletterPage() {
             <label className="block text-sm font-medium mb-2">
               Email Content
             </label>
-            <NewsletterEditor content={content} setContent={setContent} />
+
+            <div>
+              <Button
+                className="mb-2 flex items-center gap-4"
+                onClick={() => setIsRaw(!isRaw)}
+                variant="ghost"
+                size="sm"
+              >
+                <Code
+                  className={`${
+                    isRaw ? "text-primary" : "text-gray-500"
+                  } h-4 w-4`}
+                />
+                <span className="text-sm text-gray-500 dark:text-gray-400">
+                  {isRaw ? "Raw HTML Mode" : "Rich Text Editor Mode"}
+                </span>
+              </Button>
+            </div>
+            {isRaw ? (
+              <Textarea
+                className="w-full h-64 font-mono text-xs"
+                placeholder="Paste your HTML content here..."
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+              />
+            ) : (
+              <NewsletterEditor content={content} setContent={setContent} />
+            )}
           </div>
 
           <div className="flex gap-4">
@@ -92,6 +121,7 @@ export default function NewsletterPage() {
               onClick={handleSendNewsletter}
               disabled={sending || !subject || !content}
               className="gap-2"
+              variant="default"
             >
               <Send className="h-4 w-4" />
               {sending ? "Sending..." : "Send Newsletter"}
