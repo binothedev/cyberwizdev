@@ -3,8 +3,9 @@ import { TestimonialSection } from "@/components/testimonial";
 import { HeroSection } from "@/components/hero";
 import { TechnologyStack } from "@/components/stack";
 import { ServicesSection } from "@/components/services";
-import { ProjectsSection } from "@/components/projects-section";
+import ProjectsSection from "@/components/projects-section";
 import { WhyChooseUsSection } from "@/components/why-choose-us";
+import { CaseStudiesSection } from "@/components/case-studies";
 import { CTASection } from "@/components/cta";
 
 export const metadata: Metadata = {

@@ -84,29 +84,35 @@ export default function ProjectsSection() {
                 </p>
                 <div className="flex gap-2 pt-4">
                   {project.githubUrl && (
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="p-2 rounded-lg hover:bg-gray-800 transition-colors"
+                    <a 
                       href={project.githubUrl}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      <Github className="h-4 w-4" />
-                    </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="p-2 rounded-lg hover:bg-gray-800 transition-colors"
+                      >
+                        <Github className="h-4 w-4" />
+                      </Button>
+                    </a>
                   )}
                   {project.demoUrl && (
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="px-3 py-1.5 text-sm hover:bg-gray-800 transition-colors"
-                      href={project.demoUrl}
+                    <a 
+                      href={project.demoUrl} 
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      <ExternalLink className="mr-1 h-4 w-4" />
-                      Demo
-                    </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="px-3 py-1.5 text-sm hover:bg-gray-800 transition-colors"
+                      >
+                        <ExternalLink className="mr-1 h-4 w-4" />
+                        Demo
+                      </Button>
+                    </a>
                   )}
                 </div>
               </CardContent>

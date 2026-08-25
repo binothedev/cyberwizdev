@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Trash2, Check, X } from "lucide-react";
 import { useSearchParams, useRouter } from "next/navigation";
@@ -175,13 +176,13 @@ export default function ProjectsPage() {
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                 required
               />
-              <Input
+              <Textarea
                 placeholder="Description"
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                 rows={3}
               />
-              <Input
+              <Textarea
                 placeholder="Long Description (optional)"
                 value={formData.longDescription}
                 onChange={(e) => setFormData({ ...formData, longDescription: e.target.value })}
