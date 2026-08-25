@@ -154,7 +154,7 @@ export default function ProjectsPage() {
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-3xl font-bold">Projects Management</h1>
         <Button
-          variant="primary"
+          variant="default"
           onClick={() => setShowCreate(true)}
           className="px-6 py-3 text-lg"
         >
@@ -179,14 +179,12 @@ export default function ProjectsPage() {
                 placeholder="Description"
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                multiline
                 rows={3}
               />
               <Input
                 placeholder="Long Description (optional)"
                 value={formData.longDescription}
                 onChange={(e) => setFormData({ ...formData, longDescription: e.target.value })}
-                multiline
                 rows={3}
               />
               <Input
@@ -207,7 +205,7 @@ export default function ProjectsPage() {
               <select
                 value={formData.status}
                 onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                className="mt-2 block w-full rounded-border border-gray-300 shadow-sm focus:border-primary focus:ring-primary w-full py-2.5 pc:bg-white pc:text-gray-900 pc:rounded-md pc:shadow-sm pc:focus:ring-primary pc:focus:ring-80 pc:outline-none"
+                className="mt-2 block w-full rounded-border border-gray-300 shadow-sm focus:border-primary focus:ring-primary py-2.5 pc:bg-white pc:text-gray-900 pc:rounded-md pc:shadow-sm pc:focus:ring-primary pc:focus:ring-80 pc:outline-none"
               >
                 <option value="active">Active</option>
                 <option value="archived">Archived</option>
