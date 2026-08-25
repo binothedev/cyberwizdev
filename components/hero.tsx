@@ -8,85 +8,156 @@ interface HeroSectionProps {
   className?: string;
 }
 
+const NODES = [
+  { id: "web", label: "WEB", x: 130, y: 130 },
+  { id: "app", label: "APP", x: 670, y: 130 },
+  { id: "api", label: "API", x: 130, y: 470 },
+  { id: "cld", label: "CLD", x: 670, y: 470 },
+] as const;
+
+const HUB = { x: 400, y: 300 };
+
 export function HeroSection({ className = "" }: HeroSectionProps) {
   return (
     <section
-      className={`relative min-h-screen py-20 flex items-center justify-center overflow-hidden bg-black ${className}`}
+      className={`relative min-h-screen py-20 flex items-center justify-center overflow-hidden bg-hero-ink ${className}`}
     >
-      {/* Cinematic Background Grid */}
-      <div className="absolute inset-0">
-        <div className="absolute top-0 left-0 w-full h-full overflow-hidden">
-          <div
-            className="absolute top-1/4 left-1/4 w-64 h-64 rounded-full blur-3xl animate-pulse"
-          />
-          <div
-            className="absolute bottom-1/4 right-1/4 w-64 h-64 rounded-full blur-3xl animate-pulse delay-2000"
-          />
-          <div
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full blur animate-spin-slow"
-          />
-        </div>
+      {/* Blueprint grid — structure, not noise */}
+      <div className="absolute inset-0 bg-blueprint-grid opacity-[0.07]" />
 
-        {/* Cinematic Vector Lines */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-0 left-0 w-full h-px bg-cyan-500"></div>
-          <div className="absolute top-0 right-0 w-px h-full bg-magenta-500"></div>
-          <div className="absolute bottom-0 left-0 w-full h-px bg-cyan-500"></div>
-          <div className="absolute bottom-0 right-0 w-px h-full bg-magenta-500"></div>
-          <div className="absolute left-0 top-1/2 h-px w-full bg-cyan-500"></div>
-          <div className="absolute right-0 top-1/2 h-px w-full bg-magenta-500"></div>
-        </div>
+      {/* Frame lines */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-amber-500/40 to-transparent" />
+        <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-cyan-500/30 to-transparent" />
+      </div>
 
-        {/* Grid Pattern */}
-        <div className="absolute inset-0 grid grid-cols-6 grid-rows-6 gap-6">
-          {Array.from({ length: 36 }, (_, i) => {
-            const col = i % 6;
-            const row = Math.floor(i / 6);
-            const delay = i * 0.1;
-            const size = Math.random() * 4 + 2;
+      {/* Signature element: systems schematic — replaces the empty blur orbs */}
+      <div className="absolute inset-0 flex items-center justify-center opacity-[0.55] md:opacity-70">
+        <svg
+          viewBox="0 0 800 600"
+          className="w-[140%] max-w-none md:w-full md:max-w-4xl"
+          aria-hidden="true"
+        >
+          {NODES.map((node) => {
+            const midX = (node.x + HUB.x) / 2;
+            const midY = (node.y + HUB.y) / 2 - 30 * (node.y < HUB.y ? 1 : -1);
+            const path = `M ${node.x} ${node.y} Q ${midX} ${midY} ${HUB.x} ${HUB.y}`;
             return (
-              <div
-                key={i}
-                className={`absolute bg-cyan-500/5 rounded-md opacity-0 hover:opacity-100 transition-opacity duration-300 ${
-                  row % 2 === 0 ? "animate-pulse-slow" : "animate-pulse-slow delay-100"
-                }`}
-                style={{ width: size, height: size, top: row * 30, left: col * 20 }}
-              />
+              <g key={node.id}>
+                {/* connector beam */}
+                <path
+                  d={path}
+                  fill="none"
+                  stroke="#5EEAD4"
+                  strokeOpacity="0.25"
+                  strokeWidth="1.5"
+                />
+                <path
+                  d={path}
+                  fill="none"
+                  stroke="#FFB454"
+                  strokeWidth="1.5"
+                  strokeDasharray="4 10"
+                  className="schematic-flow"
+                />
+                {/* traveling packet */}
+                <circle r="3.5" fill="#FFB454">
+                  <animateMotion
+                    dur={`${3 + NODES.indexOf(node) * 0.6}s`}
+                    repeatCount="indefinite"
+                    path={path}
+                  />
+                </circle>
+                {/* node */}
+                <circle
+                  cx={node.x}
+                  cy={node.y}
+                  r="30"
+                  fill="#0F1420"
+                  stroke="#5EEAD4"
+                  strokeOpacity="0.5"
+                  strokeWidth="1.5"
+                  className="schematic-node"
+                />
+                <text
+                  x={node.x}
+                  y={node.y + 4}
+                  textAnchor="middle"
+                  fontSize="11"
+                  fontFamily="ui-monospace, monospace"
+                  letterSpacing="0.05em"
+                  fill="#B7C0D4"
+                >
+                  {node.label}
+                </text>
+              </g>
             );
           })}
-        </div>
+
+          {/* hub */}
+          <circle
+            cx={HUB.x}
+            cy={HUB.y}
+            r="46"
+            fill="#0F1420"
+            stroke="#FFB454"
+            strokeWidth="2"
+          />
+          <circle
+            cx={HUB.x}
+            cy={HUB.y}
+            r="46"
+            fill="none"
+            stroke="#FFB454"
+            strokeOpacity="0.4"
+            strokeWidth="2"
+            className="schematic-hub-ring"
+          />
+          <text
+            x={HUB.x}
+            y={HUB.y - 3}
+            textAnchor="middle"
+            fontSize="11"
+            fontFamily="ui-monospace, monospace"
+            letterSpacing="0.05em"
+            fill="#EDEFF5"
+          >
+            YOUR
+          </text>
+          <text
+            x={HUB.x}
+            y={HUB.y + 12}
+            textAnchor="middle"
+            fontSize="11"
+            fontFamily="ui-monospace, monospace"
+            letterSpacing="0.05em"
+            fill="#EDEFF5"
+          >
+            PRODUCT
+          </text>
+        </svg>
       </div>
 
-      {/* Floating Tech Elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-4 -left-4 w-32 h-32 rounded-full blur-2xl animate-float"></div>
-        <div className="absolute -bottom-4 -right-4 w-24 h-24 rounded-full blur-2xl animate-float-delayed"></div>
-        <div className="absolute top-1/3 left-1/4 w-16 h-16 rounded-full blur-2xl"></div>
-        <div className="absolute bottom-1/3 right-1/4 w-16 h-16 rounded-full blur-2xl"></div>
-        <div className="absolute -top-1/2 -left-1/2 w-32 h-32 rounded-full blur-2xl animate-spin-slow"></div>
-      </div>
-
+      {/* Content */}
       <div className="relative z-10 text-center px-6 max-w-7xl mx-auto">
-        <p className="mb-8 text-lg text-gray-400">
-          {"/* Transforming businesses with cutting-edge software solutions since 2016 */"}
+        <p className="mb-8 text-sm md:text-base font-mono tracking-wide text-amber-400/80">
+          {"// building future-ready software since 2016"}
         </p>
 
-        <h1 className="text-5xl md:text-7xl lg:text-9xl font-bold text-white mb-6 leading-tight tracking-tight">
-          Build{" "}
-          <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-purple-500 from-20% via-40% to-80%">
-            Future-Ready Software
-          </span>
+        <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-6 leading-[1.05] tracking-tight">
+          Systems built to{" "}
+          <span className="text-amber-400">outlast the roadmap</span>
         </h1>
 
-        <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed">
-          We craft custom software solutions that drive business growth. From web
-          applications to enterprise systems, we turn your vision into reality.
+        <p className="text-lg md:text-xl text-gray-300/90 mb-10 max-w-2xl mx-auto leading-relaxed">
+          We design and engineer custom software — from web platforms to
+          enterprise systems — built to hold up as your business scales.
         </p>
 
-        <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+        <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
           <Button
             size="lg"
-            className="group bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-700 hover:to-purple-700 text-white px-8 py-4 text-lg font-semibold rounded-xl shadow-lg transform hover:scale-105 transition-all duration-300"
+            className="group bg-amber-500 hover:bg-amber-400 text-black px-8 py-4 text-lg font-semibold rounded-xl shadow-lg shadow-amber-500/20 transition-all duration-300"
             asChild
           >
             <Link href="/contact">
@@ -97,133 +168,117 @@ export function HeroSection({ className = "" }: HeroSectionProps) {
           <Button
             size="lg"
             variant="outline"
-            className="group bg-white/10 backdrop-blur-sm border-cyan/30 text-white hover:bg-white/20 px-8 py-4 text-lg font-semibold rounded-xl"
+            className="bg-white/5 backdrop-blur-sm border-white/15 text-white hover:bg-white/10 px-8 py-4 text-lg font-semibold rounded-xl"
             asChild
           >
-            <Link href="#case-studies">
-              View Success Stories
-              <ArrowRight className="mr-2 h-5 w-5" />
-            </Link>
+            <Link href="#case-studies">View Success Stories</Link>
           </Button>
         </div>
 
-        {/* Stat Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12">
-          <div className="text-center group">
-            <div className="flex justify-center mb-2">
-              <div className="p-3 bg-cyan-500/10 rounded-full group-hover:scale-110 transition-transform duration-300">
-                <svg
-                  className="w-6 h-6 text-cyan-400"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M13 2L3 14h6l-1 9L23 2" />
-                  <circle cx="9" cy="21" r="1" />
-                  <circle cx="20" cy="21" r="1" />
-                </svg>
+        {/* Stat cards */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-4 border-t border-white/10 pt-10">
+          {[
+            { value: "500+", label: "Projects Delivered" },
+            { value: "200+", label: "Happy Clients" },
+            { value: "25+", label: "Countries" },
+            { value: "8+", label: "Years Experience" },
+          ].map((stat) => (
+            <div key={stat.label} className="text-center">
+              <div className="text-3xl font-bold text-white mb-1">
+                {stat.value}
+              </div>
+              <div className="text-sm text-gray-400 font-mono">
+                {stat.label}
               </div>
             </div>
-            <div className="text-3xl font-bold text-white mb-1 group-hover:text-cyan-400 transition-colors duration-300">500+</div>
-            <div className="text-sm text-gray-400">Projects Delivered</div>
-          </div>
-
-          <div className="text-center group">
-            <div className="flex justify-center mb-2">
-              <div className="p-3 bg-cyan-500/10 rounded-full group-hover:scale-110 transition-transform duration-300">
-                <svg
-                  className="w-6 h-6 text-cyan-400"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                  <circle cx="9" cy="21" r="1" />
-                  <circle cx="20" cy="21" r="1" />
-                  <path d="M22 21l-4-4" />
-                </svg>
-              </div>
-            </div>
-            <div className="text-3xl font-bold text-white mb-1 group-hover:text-cyan-400 transition-colors duration-300">200+</div>
-            <div className="text-sm text-gray-400">Happy Clients</div>
-          </div>
-
-          <div className="text-center group">
-            <div className="flex justify-center mb-2">
-              <div className="p-3 bg-cyan-500/10 rounded-full group-hover:scale-110 transition-transform duration-300">
-                <svg
-                  className="w-6 h-6 text-cyan-400"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <line x1="18" y1="20" x2="18" y2="10" />
-                  <line x1="12" y1="20" x2="12" y2="4" />
-                  <line x1="6" y1="20" x2="6" y2="14" />
-                </svg>
-              </div>
-            </div>
-            <div className="text-3xl font-bold text-white mb-1 group-hover:text-cyan-400 transition-colors duration-300">25+</div>
-            <div className="text-sm text-gray-400">Countries</div>
-          </div>
-
-          <div className="text-center group">
-            <div className="flex justify-center mb-2">
-              <div className="p-3 bg-cyan-500/10 rounded-full group-hover:scale-110 transition-transform duration-300">
-                <svg
-                  className="w-6 h-6 text-cyan-400"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <circle cx="12" cy="12" r="10" />
-                  <polyline points="12 6 12 12 16 14" />
-                </svg>
-              </div>
-            </div>
-            <div className="text-3xl font-bold text-white mb-1 group-hover:text-cyan-400 transition-colors duration-300">8+</div>
-            <div className="text-sm text-gray-400">Years Experience</div>
-          </div>
+          ))}
         </div>
       </div>
 
-      {/* Scroll Indicator */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 animate-bounce">
-        <div className="w-6 h-10 border-2 border-white/20 rounded-full flex justify-center">
-          <div className="w-1 h-3 bg-white rounded-full mt-2 animate-pulse"></div>
+      {/* Scroll indicator — a real cue, not a decorative bounce */}
+      <Link
+        href="#case-studies"
+        className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 group"
+      >
+        <span className="text-[10px] font-mono tracking-widest text-gray-500 group-hover:text-amber-400 transition-colors">
+          SCROLL
+        </span>
+        <div className="w-6 h-10 border-2 border-white/20 group-hover:border-amber-400/60 rounded-full flex justify-center transition-colors">
+          <div className="w-1 h-3 bg-white/60 rounded-full mt-2 animate-scroll-dot" />
         </div>
-      </div>
+      </Link>
 
       <style jsx>{`
-        @keyframes float {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-25px); }
+        .bg-hero-ink {
+          background: radial-gradient(
+            120% 100% at 50% 0%,
+            #131a29 0%,
+            #0a0e17 60%
+          );
         }
-        @keyframes float-delayed {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-15px); }
+        .bg-blueprint-grid {
+          background-image:
+            linear-gradient(#5eead4 1px, transparent 1px),
+            linear-gradient(90deg, #5eead4 1px, transparent 1px);
+          background-size: 40px 40px;
         }
-        @keyframes spin-slow {
-          from { transform: translate(-50%, -50%) rotate(0deg); }
-          to { transform: translate(-50%, -50%) rotate(360deg); }
+        .schematic-flow {
+          animation: dash-flow 1.4s linear infinite;
         }
-        .animate-float { animation: float 8s ease-in-out infinite; }
-        .animate-float-delayed { animation: float-delayed 10s ease-in-out infinite; }
-        .animate-spin-slow { animation: spin-slow 25s linear infinite; }
-        .bg-black {
-          background: linear-gradient(180deg, #0a0a0f 0%, #0f0f1a 100%);
+        @keyframes dash-flow {
+          to {
+            stroke-dashoffset: -28;
+          }
+        }
+        .schematic-node {
+          animation: node-breathe 4s ease-in-out infinite;
+        }
+        @keyframes node-breathe {
+          0%,
+          100% {
+            stroke-opacity: 0.5;
+          }
+          50% {
+            stroke-opacity: 0.9;
+          }
+        }
+        .schematic-hub-ring {
+          animation: hub-pulse 2.4s ease-out infinite;
+          transform-origin: 400px 300px;
+        }
+        @keyframes hub-pulse {
+          0% {
+            transform: scale(1);
+            stroke-opacity: 0.5;
+          }
+          100% {
+            transform: scale(1.35);
+            stroke-opacity: 0;
+          }
+        }
+        .animate-scroll-dot {
+          animation: scroll-dot 1.8s ease-in-out infinite;
+        }
+        @keyframes scroll-dot {
+          0% {
+            transform: translateY(0);
+            opacity: 1;
+          }
+          70% {
+            opacity: 0.3;
+          }
+          100% {
+            transform: translateY(10px);
+            opacity: 0;
+          }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .schematic-flow,
+          .schematic-node,
+          .schematic-hub-ring,
+          .animate-scroll-dot {
+            animation: none;
+          }
         }
       `}</style>
     </section>
