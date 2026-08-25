@@ -42,7 +42,7 @@ export default function ProjectsPage() {
 
   const router = useRouter();
   const searchParams = useSearchParams();
-  const currentPage = searchParams.get("page") || "1";
+  const currentPage = searchParams?.get("page") || "1";
 
   useEffect(() => {
     fetchProjects();
