@@ -4,6 +4,10 @@ import Link from "@/components/link";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 
+interface HeroSectionProps {
+  className?: string;
+}
+
 export function HeroSection({ className = "" }: HeroSectionProps) {
   return (
     <section
@@ -14,13 +18,13 @@ export function HeroSection({ className = "" }: HeroSectionProps) {
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden">
           <div
             className="absolute top-1/4 left-1/4 w-64 h-64 rounded-full blur-3xl animate-pulse"
-          /></div>
+          />
           <div
             className="absolute bottom-1/4 right-1/4 w-64 h-64 rounded-full blur-3xl animate-pulse delay-2000"
-          /></div>
+          />
           <div
             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full blur animate-spin-slow"
-          /></div>
+          />
         </div>
 
         {/* Cinematic Vector Lines */}
