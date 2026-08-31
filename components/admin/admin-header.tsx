@@ -56,6 +56,13 @@ export default function AdminHeader({ user }: AdminHeaderProps) {
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
+                href="/admin/change-password"
+                className="cursor-pointer"
+              >
+                Change Password
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
                 className="cursor-pointer text-red-600" // Changed from text-red-600 to text-red-500
                 onClick={() => logout()}
               >
