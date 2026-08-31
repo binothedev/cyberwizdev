@@ -1,7 +1,7 @@
-'use server';
+﻿'use server';
 
 import { z } from 'zod';
-import { prisma } from '@/prisma/prisma'; // Adjust the import path as necessary
+import { NewsletterSubscription } from '@/lib/db/models/NewsletterSubscription';
 
 // --- Zod Schema for validation ---
 const UnsubscribeSchema = z.object({
@@ -30,7 +30,7 @@ export async function unsubscribeUser(email: string): Promise<{ success: boolean
 
   try {
     // --- DATABASE LOGIC ---
-    const existingSubscription = await prisma.newsletterSubscription.findUnique({ // Changed from newsletterSubscription to NewsletterSubscription
+    const existingSubscription = await NewsletterSubscription.findUnique({
       where: { email: validatedEmail },
     });
 
@@ -48,7 +48,7 @@ export async function unsubscribeUser(email: string): Promise<{ success: boolean
         };
     }
 
-    await prisma.newsletterSubscription.update({
+    await NewsletterSubscription.update({
       where: { email: validatedEmail },
       data: { status: 'unsubscribed' },
     });
@@ -84,3 +84,4 @@ export async function unsubscribeUser(email: string): Promise<{ success: boolean
     };
   }
 }
+

@@ -1,6 +1,6 @@
-// app/api/admin/subscribers/[id]/route.ts
+﻿// app/api/admin/subscribers/[id]/route.ts
 import { NextResponse } from "next/server";
-import { prisma } from "@/prisma/prisma";
+import { NewsletterSubscription } from "@/lib/db/models/NewsletterSubscription";
 import { auth } from "@/auth";
 
 export async function DELETE(
@@ -14,7 +14,7 @@ export async function DELETE(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    await prisma.newsletterSubscription.delete({
+    await NewsletterSubscription.delete({
       where: { id: awaitedParams.id },
     });
 

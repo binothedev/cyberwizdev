@@ -1,6 +1,5 @@
-// app/api/admin/chat/sessions/[id]/route.ts
-import { NextResponse } from "next/server";
-import { prisma } from "@/prisma/prisma";
+﻿import { NextResponse } from "next/server";
+import { ChatSession } from "@/lib/db/models/ChatSession";
 import { auth } from "@/auth";
 
 export async function PATCH(
@@ -16,7 +15,7 @@ export async function PATCH(
 
     const { status } = await req.json();
 
-    await prisma.chatSession.update({
+    await ChatSession.update({
       where: { id: awaitedParams.id },
       data: { status },
     });

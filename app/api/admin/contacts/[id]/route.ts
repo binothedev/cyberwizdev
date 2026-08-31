@@ -1,6 +1,6 @@
-// app/api/admin/contacts/[id]/route.ts
+﻿// app/api/admin/contacts/[id]/route.ts
 import { NextResponse } from "next/server";
-import { prisma } from "@/prisma/prisma";
+import { Contact } from "@/lib/db/models/Contact";
 import { auth } from "@/auth";
 
 export async function PATCH(
@@ -16,7 +16,7 @@ export async function PATCH(
 
     const { status } = await req.json();
 
-    await prisma.contact.update({
+    await Contact.update({
       where: { id: awaitedParams.id },
       data: { status },
     });
@@ -39,7 +39,7 @@ export async function DELETE(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    await prisma.contact.delete({
+    await Contact.delete({
       where: { id: awaitedParams.id },
     });
 

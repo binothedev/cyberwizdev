@@ -1,6 +1,5 @@
-// app/api/admin/subscribers/route.ts
 import { NextResponse } from "next/server";
-import { prisma } from "@/prisma/prisma";
+import { NewsletterSubscription } from "@/lib/db/models/NewsletterSubscription";
 import { auth } from "@/auth";
 
 export async function GET() {
@@ -10,11 +9,11 @@ export async function GET() {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const subscribers = await prisma.newsletterSubscription.findMany({
+    const subscribers = await NewsletterSubscription.findMany({
       orderBy: { createdAt: "desc" },
     });
 
-    return NextResponse.json({ subscribers });
+    return NextResponse.json({ subscribers: subscribers.map((s) => s.toObject()) });
   } catch (error) {
     console.error("Fetch subscribers error:", error);
     return NextResponse.json({ error: "Failed to fetch subscribers" }, { status: 500 });

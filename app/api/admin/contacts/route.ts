@@ -1,6 +1,5 @@
-// app/api/admin/contacts/route.ts
 import { NextResponse } from "next/server";
-import { prisma } from "@/prisma/prisma";
+import { Contact } from "@/lib/db/models/Contact";
 import { auth } from "@/auth";
 
 export async function GET() {
@@ -10,11 +9,11 @@ export async function GET() {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const contacts = await prisma.contact.findMany({
+    const contacts = await Contact.findMany({
       orderBy: { createdAt: "desc" },
     });
 
-    return NextResponse.json({ contacts });
+    return NextResponse.json({ contacts: contacts.map((c) => c.toObject()) });
   } catch (error) {
     console.error("Fetch contacts error:", error);
     return NextResponse.json({ error: "Failed to fetch contacts" }, { status: 500 });

@@ -1,7 +1,8 @@
 import { Server as NetServer } from "http";
 import { NextApiResponse } from "next";
 import { Server as ServerIO } from "socket.io";
-import { prisma } from "@/prisma/prisma";
+import { ChatMessage } from "@/lib/db/models/ChatMessage";
+import { ChatSession } from "@/lib/db/models/ChatSession";
 
 export type NextApiResponseServerIO = NextApiResponse & {
   socket: {
@@ -11,7 +12,7 @@ export type NextApiResponseServerIO = NextApiResponse & {
   };
 };
 
-interface ChatMessage {
+interface ChatMessagePayload {
   id: string;
   sessionId: string;
   message: string;
@@ -40,12 +41,15 @@ export class WebSocketChatServer {
           this.activeConnections.set(sessionId, socket.id);
 
           // Send chat history to the client
-          const messages = await prisma.chatMessage.findMany({
+          const messages = await ChatMessage.findMany({
             where: { sessionId },
             orderBy: { createdAt: "asc" },
           });
 
-          socket.emit("chat-history", messages);
+          socket.emit(
+            "chat-history",
+            messages.map((m) => m.toObject())
+          );
           console.log(`Client ${socket.id} joined chat session ${sessionId}`);
         } catch (error) {
           console.error("Error joining chat:", error);
@@ -73,7 +77,7 @@ export class WebSocketChatServer {
           const { sessionId, message, userName } = data;
 
           // Save message to database
-          const newMessage = await prisma.chatMessage.create({
+          const newMessage = await ChatMessage.create({
             data: {
               sessionId,
               message,
@@ -83,30 +87,28 @@ export class WebSocketChatServer {
           });
 
           // Update chat session
-          await prisma.chatSession.update({
+          await ChatSession.update({
             where: { id: sessionId },
-            data: { 
+            data: {
               lastMessage: message,
-              updatedAt: new Date(),
             },
           });
 
           // Broadcast message to OTHER clients in the session room (not sender)
           // User already has optimistic update, so we only send to admins
-          socket.to(`chat:${sessionId}`).emit("new-message", newMessage);
-          
+          socket.to(`chat:${sessionId}`).emit("new-message", newMessage.toObject());
+
           // Notify admins about the new message
-          const session = await prisma.chatSession.findUnique({
+          const session = await ChatSession.findUnique({
             where: { id: sessionId },
           });
           if (session) {
             this.io.to("admin-room").emit("session-updated", {
-              ...session,
+              ...session.toObject(),
               lastMessage: message,
-              updatedAt: new Date(),
             });
           }
-          
+
           console.log(`Message sent in session ${sessionId}:`, message);
         } catch (error) {
           console.error("Error sending message:", error);
@@ -123,7 +125,7 @@ export class WebSocketChatServer {
           const { sessionId, message, senderName } = data;
 
           // Save message to database
-          const newMessage = await prisma.chatMessage.create({
+          const newMessage = await ChatMessage.create({
             data: {
               sessionId,
               message,
@@ -133,30 +135,28 @@ export class WebSocketChatServer {
           });
 
           // Update chat session
-          await prisma.chatSession.update({
+          await ChatSession.update({
             where: { id: sessionId },
-            data: { 
+            data: {
               lastMessage: message,
-              updatedAt: new Date(),
             },
           });
 
           // Broadcast message to OTHER clients in the session room (not admin sender)
           // Admin already has optimistic update
-          socket.to(`chat:${sessionId}`).emit("new-message", newMessage);
-          
+          socket.to(`chat:${sessionId}`).emit("new-message", newMessage.toObject());
+
           // Notify other admins about the updated session
-          const session = await prisma.chatSession.findUnique({
+          const session = await ChatSession.findUnique({
             where: { id: sessionId },
           });
           if (session) {
             this.io.to("admin-room").emit("session-updated", {
-              ...session,
+              ...session.toObject(),
               lastMessage: message,
-              updatedAt: new Date(),
             });
           }
-          
+
           console.log(`Admin message sent in session ${sessionId}:`, message);
         } catch (error) {
           console.error("Error sending admin message:", error);
@@ -185,7 +185,7 @@ export class WebSocketChatServer {
   // Method to notify admins about new session
   notifyNewSession(session: any) {
     this.io.to("admin-room").emit("new-session", session);
-    console.log(`Notified admins about new session: ${session.id}`);
+    console.log(`Notify admins about new session: ${session.id}`);
   }
 
   // Get active connections count

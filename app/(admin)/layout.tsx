@@ -1,8 +1,8 @@
-// app/admin/layout.tsx
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import AdminSidebar from "@/components/admin/admin-sidebar";
 import AdminHeader from "@/components/admin/admin-header";
+import { AdminMobileNav } from "@/components/admin/admin-mobile-nav";
 
 export const metadata = {
   title: "Admin Dashboard - CyberWizDev",
@@ -18,10 +18,17 @@ export default async function AdminLayout({
 
   return (
     <div className="flex h-screen bg-gray-50 dark:bg-gray-900">
-      <AdminSidebar />
+      {/* Desktop sidebar */}
+      <div className="hidden md:block">
+        <AdminSidebar />
+      </div>
+
+      {/* Mobile sidebar (drawer) */}
+      <AdminMobileNav />
+
       <div className="flex flex-col flex-1 overflow-hidden">
         <AdminHeader user={session?.user} />
-        <main className="flex-1 overflow-y-auto p-6">{children}</main>
+        <main className="flex-1 overflow-y-auto p-4 md:p-6">{children}</main>
       </div>
     </div>
   );

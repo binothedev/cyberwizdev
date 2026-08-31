@@ -121,7 +121,7 @@ export default function ContactsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold">Contact Form Submissions</h1>
+        <h1 className="text-2xl md:text-3xl font-bold">Contact Form Submissions</h1>
         <p className="text-gray-500 dark:text-gray-400 mt-2">
           View and manage contact form submissions
         </p>
@@ -169,79 +169,81 @@ export default function ContactsPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Email</TableHead>
-                <TableHead>Phone</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Date</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {contacts.length === 0 ? (
+          <div className="overflow-x-auto">
+            <Table className="min-w-[760px]">
+              <TableHeader>
                 <TableRow>
-                  <TableCell colSpan={6} className="text-center text-gray-500">
-                    No contact submissions yet
-                  </TableCell>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Email</TableHead>
+                  <TableHead>Phone</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Date</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
-              ) : (
-                contacts.map((contact) => (
-                  <TableRow
-                    key={contact.id}
-                    className="cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800"
-                    onClick={() => handleView(contact)}
-                  >
-                    <TableCell className="font-medium">{contact.name}</TableCell>
-                    <TableCell>{contact.email}</TableCell>
-                    <TableCell>{contact.phone}</TableCell>
-                    <TableCell>
-                      <Badge
-                        variant={
-                          contact.status === "unread"
-                            ? "destructive"
-                            : contact.status === "read"
-                            ? "secondary"
-                            : "default"
-                        }
-                      >
-                        {contact.status}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      {new Date(contact.createdAt).toLocaleDateString()}
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <div className="flex justify-end gap-2">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleView(contact);
-                          }}
-                        >
-                          <Eye className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleDelete(contact.id);
-                          }}
-                        >
-                          <Trash2 className="h-4 w-4 text-red-500" />
-                        </Button>
-                      </div>
+              </TableHeader>
+              <TableBody>
+                {contacts.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={6} className="text-center text-gray-500">
+                      No contact submissions yet
                     </TableCell>
                   </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
+                ) : (
+                  contacts.map((contact) => (
+                    <TableRow
+                      key={contact.id}
+                      className="cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800"
+                      onClick={() => handleView(contact)}
+                    >
+                      <TableCell className="font-medium">{contact.name}</TableCell>
+                      <TableCell>{contact.email}</TableCell>
+                      <TableCell>{contact.phone}</TableCell>
+                      <TableCell>
+                        <Badge
+                          variant={
+                            contact.status === "unread"
+                              ? "destructive"
+                              : contact.status === "read"
+                              ? "secondary"
+                              : "default"
+                          }
+                        >
+                          {contact.status}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
+                        {new Date(contact.createdAt).toLocaleDateString()}
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <div className="flex justify-end gap-2">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleView(contact);
+                            }}
+                          >
+                            <Eye className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDelete(contact.id);
+                            }}
+                          >
+                            <Trash2 className="h-4 w-4 text-red-500" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </div>
         </CardContent>
       </Card>
 

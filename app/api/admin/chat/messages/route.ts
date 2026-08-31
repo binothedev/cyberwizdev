@@ -1,6 +1,5 @@
-// app/api/admin/chat/messages/route.ts
 import { NextResponse } from "next/server";
-import { prisma } from "@/prisma/prisma";
+import { ChatMessage } from "@/lib/db/models/ChatMessage";
 import { auth } from "@/auth";
 
 export async function GET(req: Request) {
@@ -17,12 +16,12 @@ export async function GET(req: Request) {
       return NextResponse.json({ error: "Session ID required" }, { status: 400 });
     }
 
-    const messages = await prisma.chatMessage.findMany({
+    const messages = await ChatMessage.findMany({
       where: { sessionId },
       orderBy: { createdAt: "asc" },
     });
 
-    return NextResponse.json({ messages });
+    return NextResponse.json({ messages: messages.map((m) => m.toObject()) });
   } catch (error) {
     console.error("Fetch messages error:", error);
     return NextResponse.json({ error: "Failed to fetch messages" }, { status: 500 });

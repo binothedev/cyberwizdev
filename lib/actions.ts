@@ -4,14 +4,15 @@ import { ContactFormData } from "@/components/ContactForm";
 import { sendContactFormAdmin } from "@/email/templates/contactFormAdmin";
 import { sendContactFormUser } from "@/email/templates/contactFormUser";
 import { sendNewsletterSubscription } from "@/email/templates/newsletterSubscription";
-import { prisma } from "@/prisma/prisma";
+import { Contact } from "@/lib/db/models/Contact";
+import { NewsletterSubscription } from "@/lib/db/models/NewsletterSubscription";
 import nodemailer from "nodemailer";
 
 export const contact = async (data: ContactFormData) => {
   const { name, phone, email, message } = data;
 
   try {
-    await prisma.contact.create({ data: { name, email, message, phone } });
+    await Contact.create({ data: { name, email, message, phone } });
 
     sendContactFormUser(email, {
       name,
@@ -35,7 +36,7 @@ export const contact = async (data: ContactFormData) => {
 
 export const subscribeToNewsletter = async (email: string) => {
   try {
-    await prisma.newsletterSubscription.create({ data: { email } });
+    await NewsletterSubscription.create({ data: { email } });
 
     sendNewsletterSubscription(email, {
       subscriberName: email,

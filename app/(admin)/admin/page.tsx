@@ -3,7 +3,14 @@
 
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Users, Mail, MessageSquare, Send } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { toast } from "react-hot-toast";
+import { Users, Mail, MessageSquare, Send, Database, FileDown, Loader2 } from "lucide-react";
+
+interface DbResult {
+  migrations?: unknown[];
+  seeds?: unknown[];
+}
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState({
@@ -12,6 +19,7 @@ export default function AdminDashboard() {
     chatSessions: 0,
     newsletters: 0,
   });
+  const [dbBusy, setDbBusy] = useState<"migrate" | "seed" | null>(null);
 
   useEffect(() => {
     fetchStats();
@@ -37,6 +45,38 @@ export default function AdminDashboard() {
       });
     } catch (error) {
       console.error("Failed to fetch stats");
+    }
+  };
+
+  const runDbAction = async (action: "migrate" | "seed") => {
+    setDbBusy(action);
+    try {
+      const res = await fetch("/api/admin/db", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action }),
+      });
+      const data = (await res.json()) as {
+        result?: DbResult;
+        error?: string;
+      };
+      if (!res.ok) {
+        toast.error(data.error || `${action} failed`);
+        return;
+      }
+      const items = action === "migrate" ? data.result?.migrations : data.result?.seeds;
+      const count = Array.isArray(items) ? items.length : 0;
+      toast.success(
+        action === "migrate"
+          ? `Migrations complete (${count} applied)`
+          : `Seed complete (${count} files)`
+      );
+      fetchStats();
+    } catch (error) {
+      toast.error("Database relay error — check RELAY_URL / RELAY_SECRET");
+      console.error("DB action error:", error);
+    } finally {
+      setDbBusy(null);
     }
   };
 
@@ -137,6 +177,34 @@ export default function AdminDashboard() {
                 </div>
               </div>
             </a>
+            <div className="flex flex-col sm:flex-row gap-2 pt-2">
+              <Button
+                onClick={() => runDbAction("migrate")}
+                disabled={dbBusy !== null}
+                variant="outline"
+                className="flex-1"
+              >
+                {dbBusy === "migrate" ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <Database className="h-4 w-4" />
+                )}
+                Run Migrations
+              </Button>
+              <Button
+                onClick={() => runDbAction("seed")}
+                disabled={dbBusy !== null}
+                variant="outline"
+                className="flex-1"
+              >
+                {dbBusy === "seed" ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <FileDown className="h-4 w-4" />
+                )}
+                Run Seeds
+              </Button>
+            </div>
           </CardContent>
         </Card>
 

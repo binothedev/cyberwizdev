@@ -1,6 +1,6 @@
-// app/api/admin/chat/send/route.ts
 import { NextResponse } from "next/server";
-import { prisma } from "@/prisma/prisma";
+import { ChatMessage } from "@/lib/db/models/ChatMessage";
+import { ChatSession } from "@/lib/db/models/ChatSession";
 import { auth } from "@/auth";
 
 export async function POST(req: Request) {
@@ -12,7 +12,7 @@ export async function POST(req: Request) {
 
     const { sessionId, message, senderName } = await req.json();
 
-    await prisma.chatMessage.create({
+    await ChatMessage.create({
       data: {
         sessionId,
         message,
@@ -21,11 +21,10 @@ export async function POST(req: Request) {
       },
     });
 
-    await prisma.chatSession.update({
+    await ChatSession.update({
       where: { id: sessionId },
-      data: { 
+      data: {
         lastMessage: message,
-        updatedAt: new Date(),
       },
     });
 

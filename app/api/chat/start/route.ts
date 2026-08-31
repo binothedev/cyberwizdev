@@ -1,12 +1,11 @@
-// app/api/chat/start/route.ts
 import { NextResponse } from "next/server";
-import { prisma } from "@/prisma/prisma";
+import { ChatSession } from "@/lib/db/models/ChatSession";
 
 export async function POST(req: Request) {
   try {
     const { userName, userEmail } = await req.json();
 
-    const session = await prisma.chatSession.create({
+    const session = await ChatSession.create({
       data: {
         userName,
         userEmail,
@@ -14,7 +13,7 @@ export async function POST(req: Request) {
       },
     });
 
-    return NextResponse.json({ sessionId: session.id });
+    return NextResponse.json({ sessionId: session.get("id") });
   } catch (error) {
     console.error("Start chat error:", error);
     return NextResponse.json({ error: "Failed to start chat" }, { status: 500 });

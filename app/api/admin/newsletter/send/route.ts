@@ -1,9 +1,8 @@
-// app/api/admin/newsletter/send/route.ts
 import { NextResponse } from "next/server";
-import { prisma } from "@/prisma/prisma";
+import { NewsletterSubscription } from "@/lib/db/models/NewsletterSubscription";
+import { Newsletter } from "@/lib/db/models/Newsletter";
 import { auth } from "@/auth";
 import { sendNewsletter } from "@/email/templates/newsletter";
-import { NewsletterSubscription } from "@prisma/client";
 import { Session } from "next-auth";
 
 export async function POST(req: Request) {
@@ -16,7 +15,7 @@ export async function POST(req: Request) {
     const { subject, content } = await req.json();
 
     // Get all active subscribers
-    const subscribers = await prisma.newsletterSubscription.findMany({
+    const subscribers = await NewsletterSubscription.findMany({
       where: { status: "active" },
     });
 
@@ -61,7 +60,7 @@ const sendMails = async (
   }
 
   // Save newsletter record
-  await prisma.newsletter.create({
+  await Newsletter.create({
     data: {
       subject,
       content,

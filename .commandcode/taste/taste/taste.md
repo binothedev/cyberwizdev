@@ -1,0 +1,11 @@
+# Taste
+- Prefers simple, hand-rolled, lightweight solutions over heavyweight frameworks and abstractions — explicitly asked for a "basic simple ORM" and "simple object oriented classes" rather than adopting an existing ORM/framework. Confidence: 0.8
+- Prefers managing schema via raw SQL migration files (SQL files + a small runner class) rather than ORM-driven migration tooling. Confidence: 0.7
+- Wants explicit security layers on any API surface that touches the database (request authentication/signing, replay protection, rate limiting) — asked to "add security layers too for authenticating requests." Confidence: 0.7
+- Prefers a single-file implementation for small utility services/APIs when it keeps deployment simple ("one single php file"). Confidence: 0.6
+- Deploys production on cPanel shared hosting where the app server cannot reach the DB directly; solutions must fit cPanel constraints (e.g., PHP running on the same host as MySQL via localhost). Confidence: 0.7
+- Keeps each runtime's responsibilities in its own layer: the ORM/data layer belongs in the application (Next.js/TypeScript), and PHP should only be the minimal SQL relay on the server — explicitly corrected an implementation that put the ORM in PHP ("only the SQL relay should be"). Confidence: 0.9
+- Prefers HTTP polling over websocket infrastructure for real-time chat "hot reload" — asked to comment out the socket.io websocket code and implement a 3-second refetch interval instead. Confidence: 0.8
+- Wants the admin dashboard and its pages fully mobile responsive (slide-in drawer nav, horizontally scrollable tables, stacked layouts, back-navigation on chat). Confidence: 0.7
+- Prefers seed data to come from the real live site content (fetched from the production site) rather than fabricated placeholder data. Confidence: 0.6
+- May lack terminal/SSH access on cPanel, so ops workflows (DB migrations, seeds) must be doable without a CLI — via the admin dashboard buttons, cPanel cron jobs, or phpMyAdmin imports. Confidence: 0.7

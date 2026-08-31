@@ -1,4 +1,3 @@
-// components/live-chat-widget.tsx
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
@@ -7,7 +6,11 @@ import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { MessageCircle, X, Send } from "lucide-react";
 import { toast } from "react-hot-toast";
-import { io, Socket } from "socket.io-client";
+
+// WebSocket (socket.io) is COMMENTED OUT — the chat now refreshes via
+// HTTP polling every 3 seconds. To re-enable websockets, uncomment the
+// socket.io imports + initSocket() usage below and remove the polling.
+// import { io, Socket } from "socket.io-client";
 
 interface Message {
   id: string;
@@ -17,6 +20,8 @@ interface Message {
   createdAt: string;
 }
 
+const POLL_INTERVAL_MS = 3000;
+
 export default function LiveChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -24,30 +29,47 @@ export default function LiveChatWidget() {
   const [sessionId, setSessionId] = useState<string>("");
   const [userName, setUserName] = useState("");
   const [isStarted, setIsStarted] = useState(false);
-  const [isConnected, setIsConnected] = useState(false);
   const [isSending, setIsSending] = useState(false);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const socketRef = useRef<Socket | null>(null);
+  const sessionIdRef = useRef<string>("");
+  // const socketRef = useRef<Socket | null>(null);
 
-  // Get WebSocket URL from environment variable
-  const WEBSOCKET_URL = process.env.NEXT_PUBLIC_WEBSOCKET_URL || "http://localhost:3001";
+  // Get WebSocket URL from environment variable (kept for when websockets are re-enabled)
+  // const WEBSOCKET_URL = process.env.NEXT_PUBLIC_WEBSOCKET_URL || "http://localhost:3001";
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // @ts-ignore
+  // Restore an existing session from localStorage.
   useEffect(() => {
     const storedSessionId = localStorage.getItem("chatSessionId");
     if (storedSessionId) {
       setSessionId(storedSessionId);
+      sessionIdRef.current = storedSessionId;
       setIsStarted(true);
-      initSocket(storedSessionId);
+      fetchMessages(storedSessionId);
     }
-    return () => socketRef.current?.disconnect();
+    // Websocket version: initSocket(storedSessionId);
+    // return () => socketRef.current?.disconnect();
   }, []);
 
+  // Poll for new messages every 3 seconds while the chat is open & started.
+  useEffect(() => {
+    if (!isOpen || !isStarted) return;
+
+    const interval = setInterval(() => {
+      const sid = sessionIdRef.current;
+      if (sid) fetchMessages(sid);
+    }, POLL_INTERVAL_MS);
+
+    return () => clearInterval(interval);
+  }, [isOpen, isStarted]);
+
+  /*
+   * WebSocket implementation (commented out — replaced by polling above).
+   *
   const initSocket = (sid: string) => {
     socketRef.current?.disconnect();
 
@@ -61,13 +83,11 @@ export default function LiveChatWidget() {
     socketRef.current = socket;
 
     socket.on("connect", () => {
-      setIsConnected(true);
       socket.emit("join-chat", sid);
       console.log("Connected to WebSocket server");
     });
 
     socket.on("disconnect", () => {
-      setIsConnected(false);
       console.log("Disconnected from WebSocket server");
     });
 
@@ -86,6 +106,17 @@ export default function LiveChatWidget() {
       toast.error(err.message || "Connection error");
     });
   };
+  */
+
+  const fetchMessages = useCallback(async (sid: string) => {
+    try {
+      const res = await fetch(`/api/chat/messages?sessionId=${sid}`);
+      const data = await res.json();
+      setMessages(data.messages || []);
+    } catch {
+      console.error("Failed to fetch messages");
+    }
+  }, []);
 
   const startChat = useCallback(async () => {
     if (!userName.trim()) return toast.error("Please enter your name");
@@ -98,9 +129,10 @@ export default function LiveChatWidget() {
       });
       const data = await res.json();
       setSessionId(data.sessionId);
+      sessionIdRef.current = data.sessionId;
       localStorage.setItem("chatSessionId", data.sessionId);
       setIsStarted(true);
-      initSocket(data.sessionId);
+      // Websocket version: initSocket(data.sessionId);
       toast.success("Chat started!");
     } catch {
       toast.error("Failed to start chat");
@@ -108,7 +140,7 @@ export default function LiveChatWidget() {
   }, [userName]);
 
   const sendMessage = useCallback(async () => {
-    if (!input.trim() || !socketRef.current || !isConnected) return;
+    if (!input.trim() || !sessionId) return;
 
     const message: Message = {
       id: Date.now().toString(),
@@ -123,35 +155,44 @@ export default function LiveChatWidget() {
     setIsSending(true);
 
     try {
-      socketRef.current.emit("send-message", {
-        sessionId,
-        message: message.message,
-        userName,
+      const res = await fetch("/api/chat/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ sessionId, message: message.message, userName }),
       });
+      const data = await res.json();
+      if (!data.success) throw new Error("Send failed");
+      // Refresh from server to pick up the persisted message + any admin replies.
+      await fetchMessages(sessionId);
     } catch {
       toast.error("Failed to send message");
     } finally {
       setIsSending(false);
     }
-  }, [input, isConnected, sessionId, userName]);
+  }, [input, sessionId, userName, fetchMessages]);
 
   return (
     <>
+      {/* Floating toggle button */}
+      {!isOpen && (
+        <Button
+          aria-label="Open live chat"
+          onClick={() => setIsOpen(true)}
+          className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-lg z-50 bg-[#3498db] hover:bg-[#2980b9] text-white"
+          size="icon"
+        >
+          <MessageCircle className="h-6 w-6" />
+        </Button>
+      )}
+
       {isOpen && (
-        <Card className="fixed bottom-6 right-6 w-96 h-[500px] shadow-2xl z-50 flex flex-col bg-white">
-          <div className="bg-primary text-white p-4 rounded-t-lg flex items-center justify-between">
+        <Card className="fixed bottom-6 right-6 w-[calc(100vw-3rem)] max-w-96 h-[500px] max-h-[calc(100vh-3rem)] shadow-2xl z-50 flex flex-col bg-white">
+          <div className="bg-[#3498db] text-white p-4 rounded-t-lg flex items-center justify-between">
             <div className="flex items-center gap-2">
               <MessageCircle className="h-5 w-5" />
               <div>
                 <h3 className="font-semibold">Live Chat</h3>
-                <p className="text-xs flex items-center gap-2">
-                  <span
-                    className={`inline-block w-2 h-2 rounded-full ${
-                      isConnected ? "bg-green-400" : "bg-red-400"
-                    }`}
-                  />
-                  {isConnected ? "Connected" : "Connecting..."}
-                </p>
+                <p className="text-xs opacity-90">We typically reply in minutes</p>
               </div>
             </div>
             <Button
@@ -178,13 +219,18 @@ export default function LiveChatWidget() {
                 onKeyDown={(e) => e.key === "Enter" && startChat()}
                 className="mb-4"
               />
-              <Button onClick={startChat} className="w-full">
+              <Button onClick={startChat} className="w-full bg-[#3498db] hover:bg-[#2980b9]">
                 Start Chat
               </Button>
             </div>
           ) : (
             <>
               <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                {messages.length === 0 && (
+                  <div className="h-full flex items-center justify-center text-sm text-gray-500">
+                    No messages yet — say hello!
+                  </div>
+                )}
                 {messages.map((msg) => (
                   <div
                     key={msg.id}
@@ -197,8 +243,8 @@ export default function LiveChatWidget() {
                     <div
                       className={`max-w-[75%] rounded-lg px-4 py-2 ${
                         msg.sender === "user"
-                          ? "bg-primary text-white"
-                          : "bg-gray-100 text-primary"
+                          ? "bg-[#3498db] text-white"
+                          : "bg-gray-100 text-gray-800"
                       }`}
                     >
                       {msg.sender === "admin" && msg.senderName && (
@@ -226,13 +272,14 @@ export default function LiveChatWidget() {
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-                    disabled={isSending || !isConnected}
+                    disabled={isSending}
                   />
                   <Button
                     aria-label="Send message"
                     onClick={sendMessage}
                     size="icon"
-                    disabled={isSending || !isConnected}
+                    disabled={isSending}
+                    className="bg-[#3498db] hover:bg-[#2980b9]"
                   >
                     <Send className="h-4 w-4" />
                   </Button>

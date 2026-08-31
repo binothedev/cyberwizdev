@@ -152,12 +152,12 @@ export default function ProjectsPage() {
 
   return (
     <div className="pace-y-6">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold">Projects Management</h1>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
+        <h1 className="text-2xl md:text-3xl font-bold">Projects Management</h1>
         <Button
           variant="default"
           onClick={() => setShowCreate(true)}
-          className="px-6 py-3 text-lg"
+          className="px-6 py-3 self-start sm:self-auto"
         >
           Create Project
         </Button>
@@ -235,75 +235,77 @@ export default function ProjectsPage() {
           <CardTitle>All Projects</CardTitle>
         </CardHeader>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Title</TableHead>
-                <TableHead>Slug</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {projects.length === 0 ? (
+          <div className="overflow-x-auto">
+            <Table className="min-w-[640px]">
+              <TableHeader>
                 <TableRow>
-                  <TableCell colSpan={4} className="text-center text-gray-500">
-                    No projects yet
-                  </TableCell>
+                  <TableHead>Title</TableHead>
+                  <TableHead>Slug</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Actions</TableHead>
                 </TableRow>
-              ) : (
-                projects.map((project) => (
-                  <TableRow
-                    key={project.id}
-                    className="cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800"
-                  >
-                    <TableCell className="font-medium">{project.title}</TableCell>
-                    <TableCell>{project.slug}</TableCell>
-                    <TableCell>
-                      <span
-                        className={`inline-block px-2 py-1 rounded text-xs ${
-                          project.status === "active"
-                            ? "bg-green-100 text-green-800"
-                            : "bg-gray-100 text-gray-600"
-                        }`}
-                      >
-                        {project.status}
-                      </span>
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="mr-1"
-                        onClick={() => {
-                          setFormData({
-                            title: project.title,
-                            description: project.description,
-                            longDescription: project.longDescription,
-                            image: project.image,
-                            githubUrl: project.githubUrl || "",
-                            demoUrl: project.demoUrl || "",
-                            status: project.status,
-                          });
-                          setEditing(project);
-                        }}
-                      >
-                        <X className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="ml-1 text-red-600"
-                        onClick={() => deleteProject(project.id)}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
+              </TableHeader>
+              <TableBody>
+                {projects.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={4} className="text-center text-gray-500">
+                      No projects yet
                     </TableCell>
                   </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
+                ) : (
+                  projects.map((project) => (
+                    <TableRow
+                      key={project.id}
+                      className="cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800"
+                    >
+                      <TableCell className="font-medium">{project.title}</TableCell>
+                      <TableCell>{project.slug}</TableCell>
+                      <TableCell>
+                        <span
+                          className={`inline-block px-2 py-1 rounded text-xs ${
+                            project.status === "active"
+                              ? "bg-green-100 text-green-800"
+                              : "bg-gray-100 text-gray-600"
+                          }`}
+                        >
+                          {project.status}
+                        </span>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="mr-1"
+                          onClick={() => {
+                            setFormData({
+                              title: project.title,
+                              description: project.description,
+                              longDescription: project.longDescription,
+                              image: project.image,
+                              githubUrl: project.githubUrl || "",
+                              demoUrl: project.demoUrl || "",
+                              status: project.status,
+                            });
+                            setEditing(project);
+                          }}
+                        >
+                          <X className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="ml-1 text-red-600"
+                          onClick={() => deleteProject(project.id)}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </div>
         </CardContent>
       </Card>
     </div>

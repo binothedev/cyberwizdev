@@ -1,5 +1,5 @@
-import { NextResponse } from "next/server";
-import { prisma } from "@/prisma/prisma";
+﻿import { NextResponse } from "next/server";
+import { Project } from "@/lib/db/models/Project";
 import { auth } from "@/auth";
 
 export async function GET(
@@ -13,7 +13,7 @@ export async function GET(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const project = await prisma.project.findUnique({
+    const project = await Project.findUnique({
       where: { id },
     });
 
@@ -21,7 +21,7 @@ export async function GET(
       return NextResponse.json({ error: "Project not found" }, { status: 404 });
     }
 
-    return NextResponse.json({ project });
+    return NextResponse.json({ project: project.toObject() });
   } catch (error) {
     console.error("Fetch project error:", error);
     return NextResponse.json({ error: "Failed to fetch project" }, { status: 500 });
@@ -43,7 +43,7 @@ export async function PATCH(
     const body = await request.json();
     const { title, description, longDescription, image, githubUrl, demoUrl, status, sortOrder } = body;
 
-    const project = await prisma.project.update({
+    const project = await Project.update({
       where: { id },
       data: {
         title,
@@ -58,7 +58,7 @@ export async function PATCH(
       },
     });
 
-    return NextResponse.json({ project });
+    return NextResponse.json({ project: project.toObject() });
   } catch (error) {
     console.error("Update project error:", error);
     return NextResponse.json({ error: "Failed to update project" }, { status: 500 });
@@ -76,7 +76,7 @@ export async function DELETE(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    await prisma.project.delete({
+    await Project.delete({
       where: { id },
     });
 

@@ -1,6 +1,5 @@
-// app/api/admin/chat/sessions/route.ts
 import { NextResponse } from "next/server";
-import { prisma } from "@/prisma/prisma";
+import { ChatSession } from "@/lib/db/models/ChatSession";
 import { auth } from "@/auth";
 
 export async function GET() {
@@ -10,11 +9,11 @@ export async function GET() {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const sessions = await prisma.chatSession.findMany({
+    const sessions = await ChatSession.findMany({
       orderBy: { updatedAt: "desc" },
     });
 
-    return NextResponse.json({ sessions });
+    return NextResponse.json({ sessions: sessions.map((s) => s.toObject()) });
   } catch (error) {
     console.error("Fetch sessions error:", error);
     return NextResponse.json({ error: "Failed to fetch sessions" }, { status: 500 });

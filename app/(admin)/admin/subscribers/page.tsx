@@ -93,14 +93,14 @@ export default function SubscribersPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h1 className="text-3xl font-bold">Newsletter Subscribers</h1>
+          <h1 className="text-2xl md:text-3xl font-bold">Newsletter Subscribers</h1>
           <p className="text-gray-500 dark:text-gray-400 mt-2">
             Manage your email subscribers
           </p>
         </div>
-        <Button onClick={handleExport} className="gap-2">
+        <Button onClick={handleExport} className="gap-2 self-start sm:self-auto">
           <Download className="h-4 w-4" />
           Export CSV
         </Button>
@@ -148,48 +148,50 @@ export default function SubscribersPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Email</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Subscribed Date</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {subscribers.length === 0 ? (
+          <div className="overflow-x-auto">
+            <Table className="min-w-[640px]">
+              <TableHeader>
                 <TableRow>
-                  <TableCell colSpan={4} className="text-center text-gray-500">
-                    No subscribers yet
-                  </TableCell>
+                  <TableHead>Email</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Subscribed Date</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
-              ) : (
-                subscribers.map((subscriber) => (
-                  <TableRow key={subscriber.id}>
-                    <TableCell className="font-medium">{subscriber.email}</TableCell>
-                    <TableCell>
-                      <Badge variant={subscriber.status === "active" ? "default" : "secondary"}>
-                        {subscriber.status}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      {new Date(subscriber.createdAt).toLocaleDateString()}
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleDelete(subscriber.id)}
-                      >
-                        <Trash2 className="h-4 w-4 text-red-500" />
-                      </Button>
+              </TableHeader>
+              <TableBody>
+                {subscribers.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={4} className="text-center text-gray-500">
+                      No subscribers yet
                     </TableCell>
                   </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
+                ) : (
+                  subscribers.map((subscriber) => (
+                    <TableRow key={subscriber.id}>
+                      <TableCell className="font-medium">{subscriber.email}</TableCell>
+                      <TableCell>
+                        <Badge variant={subscriber.status === "active" ? "default" : "secondary"}>
+                          {subscriber.status}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
+                        {new Date(subscriber.createdAt).toLocaleDateString()}
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleDelete(subscriber.id)}
+                        >
+                          <Trash2 className="h-4 w-4 text-red-500" />
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </div>
         </CardContent>
       </Card>
     </div>

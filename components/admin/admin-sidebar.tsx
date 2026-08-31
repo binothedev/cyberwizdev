@@ -31,7 +31,7 @@ export default function AdminSidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="w-64 bg-background border-r border-gray-200 dark:border-gray-700">
+    <aside className="w-64 h-full bg-background border-r border-gray-200 dark:border-gray-700">
       <div className="flex flex-col h-full">
         <div className="p-6">
           <Link href="/admin" className="flex items-center">
@@ -40,7 +40,7 @@ export default function AdminSidebar() {
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Admin Panel</p>
         </div>
 
-        <nav className="flex-1 px-4 space-y-1">
+        <nav className="flex-1 px-4 space-y-1 overflow-y-auto">
           {navigation.map((item) => {
             const isActive = pathname === item.href || 
               (item.href !== "/admin" && pathname?.startsWith(item.href));

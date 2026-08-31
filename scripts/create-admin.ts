@@ -1,11 +1,9 @@
 // scripts/create-admin.ts
 // Run with: npx tsx scripts/create-admin.ts
 
-import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import * as readline from "readline";
-
-const prisma = new PrismaClient();
+import { User } from "../lib/db/models/User";
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -32,7 +30,7 @@ async function createAdmin() {
     }
 
     // Check if user already exists
-    const existingUser = await prisma.user.findUnique({
+    const existingUser = await User.findUnique({
       where: { email },
     });
 
@@ -45,7 +43,7 @@ async function createAdmin() {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Create admin user
-    const admin = await prisma.user.create({
+    const admin = await User.create({
       data: {
         name,
         email,
@@ -55,14 +53,13 @@ async function createAdmin() {
     });
 
     console.log("\n✅ Admin user created successfully!");
-    console.log(`\nName: ${admin.name}`);
+    console.log(`\nName: ${admin.get("name")}`);
     console.log(`Email: ${admin.email}`);
     console.log(`Role: ${admin.role}`);
     console.log(`\nYou can now login at: /admin/login\n`);
   } catch (error) {
     console.error("\n❌ Error creating admin user:", error);
   } finally {
-    await prisma.$disconnect();
     rl.close();
   }
 }
