@@ -7,7 +7,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Trash2, Check, X } from "lucide-react";
+import { Trash2, Check, X, Database } from "lucide-react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 
@@ -40,6 +40,7 @@ export default function ProjectsPage() {
     status: "active",
   });
   const [showCreate, setShowCreate] = useState(false);
+  const [seeding, setSeeding] = useState(false);
 
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -130,6 +131,35 @@ export default function ProjectsPage() {
     }
   };
 
+  /** Insert the landing-page case studies so the #work section reads from the DB. */
+  const seedLandingProjects = async () => {
+    const confirmed = confirm(
+      "Add the landing page case studies to the database? Projects that already exist (same slug) are left untouched."
+    );
+    if (!confirmed) return;
+
+    setSeeding(true);
+    try {
+      const res = await fetch("/api/admin/projects/seed", { method: "POST" });
+      const data = await res.json();
+      if (!res.ok) {
+        toast.error(data.error || "Failed to seed landing page projects");
+        return;
+      }
+      const created = Array.isArray(data.created) ? data.created.length : 0;
+      const skipped = Array.isArray(data.skipped) ? data.skipped.length : 0;
+      toast.success(
+        `Seeded ${created} project${created === 1 ? "" : "s"}` +
+          (skipped > 0 ? `, ${skipped} already existed` : "")
+      );
+      await fetchProjects();
+    } catch (error) {
+      toast.error("Failed to seed landing page projects");
+    } finally {
+      setSeeding(false);
+    }
+  };
+
   const resetForm = () => {
     setFormData({
       title: "",
@@ -151,16 +181,27 @@ export default function ProjectsPage() {
   }
 
   return (
-    <div className="pace-y-6">
+    <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
         <h1 className="text-2xl md:text-3xl font-bold">Projects Management</h1>
-        <Button
-          variant="default"
-          onClick={() => setShowCreate(true)}
-          className="px-6 py-3 self-start sm:self-auto"
-        >
-          Create Project
-        </Button>
+        <div className="flex flex-wrap gap-3 self-start sm:self-auto">
+          <Button
+            variant="outline"
+            onClick={seedLandingProjects}
+            disabled={seeding}
+            className="px-6 py-3"
+          >
+            <Database className="mr-2 h-4 w-4" />
+            {seeding ? "Seeding…" : "Seed Landing Projects"}
+          </Button>
+          <Button
+            variant="default"
+            onClick={() => setShowCreate(true)}
+            className="px-6 py-3"
+          >
+            Create Project
+          </Button>
+        </div>
       </div>
 
       {showCreate && (
@@ -206,7 +247,7 @@ export default function ProjectsPage() {
               <select
                 value={formData.status}
                 onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                className="mt-2 block w-full rounded-border border-gray-300 shadow-sm focus:border-primary focus:ring-primary py-2.5 pc:bg-white pc:text-gray-900 pc:rounded-md pc:shadow-sm pc:focus:ring-primary pc:focus:ring-80 pc:outline-none"
+                className="mt-2 block w-full rounded-md border border-input bg-background px-3 py-2.5 text-foreground shadow-sm focus:border-primary focus:ring-2 focus:ring-ring focus:outline-none"
               >
                 <option value="active">Active</option>
                 <option value="archived">Archived</option>
@@ -248,7 +289,7 @@ export default function ProjectsPage() {
               <TableBody>
                 {projects.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={4} className="text-center text-gray-500">
+                    <TableCell colSpan={4} className="text-center text-muted-foreground">
                       No projects yet
                     </TableCell>
                   </TableRow>
@@ -256,7 +297,7 @@ export default function ProjectsPage() {
                   projects.map((project) => (
                     <TableRow
                       key={project.id}
-                      className="cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800"
+                      className="cursor-pointer hover:bg-accent"
                     >
                       <TableCell className="font-medium">{project.title}</TableCell>
                       <TableCell>{project.slug}</TableCell>
@@ -264,8 +305,8 @@ export default function ProjectsPage() {
                         <span
                           className={`inline-block px-2 py-1 rounded text-xs ${
                             project.status === "active"
-                              ? "bg-green-100 text-green-800"
-                              : "bg-gray-100 text-gray-600"
+                              ? "bg-green-500/15 text-green-600 dark:text-green-400"
+                              : "bg-muted text-muted-foreground"
                           }`}
                         >
                           {project.status}
@@ -294,7 +335,7 @@ export default function ProjectsPage() {
                         <Button
                           variant="ghost"
                           size="sm"
-                          className="ml-1 text-red-600"
+                          className="ml-1 text-destructive"
                           onClick={() => deleteProject(project.id)}
                         >
                           <Trash2 className="h-4 w-4" />

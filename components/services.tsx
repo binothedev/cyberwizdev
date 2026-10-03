@@ -1,179 +1,83 @@
-"use client";
+import Link from "@/components/link";
 
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import {
-  Code2,
-  Smartphone,
-  Cloud,
-  LineChart,
-  CheckCircle,
-  ArrowRight,
-} from "lucide-react";
-
-interface Service {
-  name: string;
-  description: string;
-  icon: React.ComponentType<{ className?: string }>;
-  features: string[];
-  color: string;
-  projects?: string;
-  href?: string;
-}
-
-interface ServicesSectionProps {
-  title?: string;
-  subtitle?: string;
-  badge?: string;
-  className?: string;
-}
-
-const services: Service[] = [
+const services = [
   {
-    name: "Web Development",
+    count: "110+",
+    title: "Web Development",
     description:
       "Lightning-fast, responsive websites built with cutting-edge technologies.",
-    icon: Code2,
-    features: ["React/Next.js", "Performance Optimized", "SEO Ready"],
-    color: "from-blue-500 to-cyan-500",
-    projects: "110+",
-    href: "/services/web-development",
+    features: ["React/Next.js", "Performance optimized", "SEO ready"],
   },
   {
-    name: "Mobile Apps",
+    count: "80+",
+    title: "Mobile Apps",
     description:
       "Native and cross-platform mobile applications that users love.",
-    icon: Smartphone,
-    features: ["iOS & Android", "Cross-platform", "App Store Ready"],
-    color: "from-purple-500 to-pink-500",
-    projects: "80+",
-    href: "/services/mobile-apps",
+    features: ["iOS & Android", "Cross-platform", "App Store ready"],
   },
   {
-    name: "Cloud Solutions",
+    count: "120+",
+    title: "Cloud Solutions",
     description: "Scalable cloud infrastructure that grows with your business.",
-    icon: Cloud,
-    features: ["AWS/Azure", "Auto-scaling", "99.9% Uptime"],
-    color: "from-green-500 to-teal-500",
-    projects: "120+",
-    href: "/services/cloud-solutions",
+    features: ["AWS/Azure", "Auto-scaling", "99.9% uptime"],
   },
   {
-    name: "Digital Strategy",
-    description: "Comprehensive digital transformation roadmaps for success.",
-    icon: LineChart,
-    features: ["Data-driven", "ROI Focused", "Growth Hacking"],
-    color: "from-orange-500 to-red-500",
-    projects: "90+",
-    href: "/services/digital-strategy",
+    count: "90+",
+    title: "Digital Strategy",
+    description:
+      "Comprehensive digital transformation roadmaps for success.",
+    features: ["Data-driven", "ROI focused", "Growth hacking"],
   },
 ];
 
-export function ServicesSection({
-  title = "Solutions That Drive Results",
-  subtitle = "From concept to deployment, we deliver comprehensive software solutions that transform businesses and accelerate growth.",
-  badge = "Our Services",
-  className = "",
-}: ServicesSectionProps) {
+export function ServicesSection({ className = "" }: { className?: string }) {
   return (
-    <section
-      className={`py-24 bg-gradient-to-br from-gray-50 to-blue-50 ${className}`}
-    >
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="text-center mb-16">
-          <Badge className="mb-4 bg-blue-100 text-blue-800">{badge}</Badge>
-          <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
-            {title}
-          </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">{subtitle}</p>
-        </div>
+    <section id="services" className={`py-[84px] ${className}`}>
+      <div className="mx-auto max-w-[1120px] px-5">
+        <p className="font-mono text-xs uppercase tracking-[0.14em] text-primary">
+          Our Services
+        </p>
+        <h2 className="my-2 text-[clamp(1.8rem,4vw,2.6rem)] leading-[1.15] tracking-[-0.03em]">
+          Solutions that drive results
+        </h2>
+        <p className="mb-10 max-w-[620px] text-muted-foreground">
+          From concept to deployment, we deliver comprehensive software
+          solutions that transform businesses and accelerate growth.
+        </p>
 
-        <div
-          className={`grid gap-8 ${
-            services.length <= 2
-              ? "md:grid-cols-2"
-              : services.length === 3
-              ? "md:grid-cols-3"
-              : "md:grid-cols-2 lg:grid-cols-4"
-          }`}
-        >
-          {services.map((service, index) => (
-            <Card
-              key={`${service.name}-${index}`}
-              className="group relative border-none shadow-xl hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-500 overflow-hidden bg-white"
+        <div className="grid grid-cols-1 gap-[18px] sm:grid-cols-2 lg:grid-cols-4">
+          {services.map((service) => (
+            <Link
+              key={service.title}
+              href="/services"
+              className="flex flex-col rounded-2xl border border-line bg-surface p-[26px] transition-all duration-200 hover:-translate-y-1 hover:border-primary hover:shadow-[0_14px_34px_var(--glow)]"
             >
-              <div
-                className={`absolute inset-0 bg-gradient-to-br ${service.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}
-              ></div>
-              <CardContent className="pt-8 pb-6 relative z-10">
-                <div
-                  className={`inline-flex p-4 rounded-xl bg-gradient-to-br ${service.color} mb-6 group-hover:scale-110 transition-transform duration-300`}
-                >
-                  <service.icon className="h-8 w-8 text-white" />
-                </div>
-
-                <div className="flex justify-between items-start mb-4">
-                  <h3 className="text-xl font-bold text-gray-900">
-                    {service.name}
-                  </h3>
-                  {service.projects && (
-                    <Badge variant="outline" className="text-xs">
-                      {service.projects}
-                    </Badge>
-                  )}
-                </div>
-
-                <p className="text-gray-600 mb-6 line-clamp-3">
-                  {service.description}
-                </p>
-
-                <div className="space-y-2 mb-6">
-                  {service.features.map((feature, featureIndex) => (
-                    <div
-                      key={`${feature}-${featureIndex}`}
-                      className="flex items-center gap-2"
-                    >
-                      <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
-                      <span className="text-sm text-gray-600">{feature}</span>
-                    </div>
-                  ))}
-                </div>
-
-                <Button
-                  variant="ghost"
-                  className="group/btn w-full justify-between p-0 h-auto hover:bg-transparent"
-                  asChild={!!service.href}
-                >
-                  {service.href ? (
-                    <a href={service.href}>
-                      <span>Learn More</span>
-                      <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
-                    </a>
-                  ) : (
-                    <>
-                      <span>Learn More</span>
-                      <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
-                    </>
-                  )}
-                </Button>
-              </CardContent>
-            </Card>
+              <div className="flex items-start justify-between gap-3">
+                <h3 className="text-[1.15rem] font-semibold leading-snug">
+                  {service.title}
+                </h3>
+                <span className="font-mono text-[1.6rem] font-bold leading-none text-primary">
+                  {service.count}
+                </span>
+              </div>
+              <p className="mt-1.5 text-[0.95rem] text-muted-foreground">
+                {service.description}
+              </p>
+              <ul className="my-3.5 list-none p-0">
+                {service.features.map((feature) => (
+                  <li
+                    key={feature}
+                    className="relative py-0.5 pl-[18px] text-[0.85rem] text-muted-foreground before:absolute before:left-0 before:top-0.5 before:text-primary before:content-['›']"
+                  >
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+              <span className="mt-auto text-[0.9rem] font-semibold text-primary">
+                Learn more →
+              </span>
+            </Link>
           ))}
-        </div>
-
-        {/* Call to Action */}
-        <div className="text-center mt-16">
-          <p className="text-gray-600 mb-6">
-            Need a custom solution? We're here to help you build exactly what
-            you need.
-          </p>
-          <Button size="lg" className="group" asChild>
-            <a href="/contact">
-              Discuss Your Project
-              <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-            </a>
-          </Button>
         </div>
       </div>
     </section>

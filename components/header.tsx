@@ -4,43 +4,75 @@ import { useState } from "react";
 import Link from "@/components/link";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 
+/**
+ * Top navigation. Labels match the landing spec exactly; link targets are
+ * hybrid: on the landing page section anchors are used, everywhere else the
+ * real routes so sub-pages stay reachable.
+ */
 const navigation = [
-  { name: "Home", href: "/" },
-  { name: "About", href: "/about" },
-  { name: "Services", href: "/services" },
-  { name: "Portfolio", href: "/portfolio" },
-  { name: "Contact", href: "/contact" },
+  { name: "Home", route: "/", section: "/" },
+  { name: "Services", route: "/services", section: "#services" },
+  { name: "Portfolio", route: "/portfolio", section: "#work" },
+  { name: "Process", route: "/#process", section: "#process" },
+  { name: "Contact", route: "/contact", section: "#contact" },
 ];
 
 function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
+  const onHome = pathname === "/";
+
+  const items = navigation.map((item) => ({
+    name: item.name,
+    href: onHome ? item.section : item.route,
+    active: onHome ? item.section === "/" : item.route === pathname,
+  }));
+
+  const closeMenu = () => setMobileMenuOpen(false);
 
   return (
-    <header className="fixed w-full bg-background/70 backdrop-blur-md z-50 border-b shadow-sm">
+    <header className="sticky top-0 z-50 border-b border-line bg-background/85 backdrop-blur-[10px]">
       <nav
-        className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8"
+        className="mx-auto flex h-16 max-w-[1120px] items-center justify-between gap-4 px-5"
         aria-label="Global"
       >
-        <div className="flex lg:flex-1">
-          <Link href="/" className="-m-1.5 p-1.5 flex items-center gap-2">
-            <Image
-              src="/logo.png"
-              alt="CyberwizDev Logo"
-              width={40}
-              height={40}
-            />
-            <span className="text-xl font-bold">Cyberwizdev</span>
-          </Link>
+        <Link
+          href="/"
+          className="text-[1.15rem] font-bold tracking-[-0.02em] text-foreground"
+          onClick={closeMenu}
+        >
+          Cyber<span className="text-primary">Wiz</span>Dev
+        </Link>
+
+        <div className="hidden items-center gap-[26px] text-[0.95rem] text-muted-foreground md:flex">
+          {items.map((item) => (
+            <Link
+              key={item.name}
+              href={item.href}
+              className={cn(
+                "transition-colors hover:text-foreground",
+                item.active && "text-foreground"
+              )}
+            >
+              {item.name}
+            </Link>
+          ))}
         </div>
-        <div className="flex lg:hidden">
+
+        <div className="flex items-center gap-3">
+          <Button className="hidden md:inline-flex" asChild>
+            <Link href="/contact">Get Started</Link>
+          </Button>
           <button
             type="button"
-            className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5"
+            className="inline-flex items-center justify-center rounded-md p-2 text-foreground md:hidden"
             onClick={() => setMobileMenuOpen((prev) => !prev)}
+            aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-nav"
+            aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
           >
             {mobileMenuOpen ? (
               <X className="h-6 w-6" />
@@ -49,60 +81,38 @@ function Header() {
             )}
           </button>
         </div>
-        <div className="hidden lg:flex lg:gap-x-12">
-          {navigation.map((item) => (
-            <Link
-              key={item.name}
-              href={item.href}
-              className={`text-sm font-semibold leading-6 hover:text-[#3498db] transition-colors ${
-                pathname === item.href ? "text-[#3498db]" : ""
-              }`}
-            >
-              {item.name}
-            </Link>
-          ))}
-        </div>
-        <Link
-          href="/contact"
-          className="hidden lg:flex lg:flex-1 lg:justify-end"
-        >
-          <Button size="lg" variant="outline" className="bg-white/10">
-            Get Started
-          </Button>
-        </Link>
       </nav>
+
       <nav
-        className={`lg:hidden transition-all duration-500 ease-in-out ${
+        id="mobile-nav"
+        className={cn(
+          "overflow-hidden transition-all duration-300 ease-in-out md:hidden",
           mobileMenuOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0"
-        } overflow-hidden`}
+        )}
       >
-        <ul className="flex items-center flex-col space-y-2 p-4  shadow-md">
-          {navigation.map((link) => (
-            <li key={link.name}>
+        <ul className="flex flex-col gap-1 border-t border-line bg-background px-5 py-4">
+          {items.map((item) => (
+            <li key={item.name}>
               <Link
-                href={link.href}
-                onClick={() => setMobileMenuOpen((prev) => !prev)}
-                className={`text-sm font-semibold leading-6 hover:text-[#3498db] transition-colors ${
-                  pathname === link.href ? "text-[#3498db]" : ""
-                }`}
+                href={item.href}
+                onClick={closeMenu}
+                className={cn(
+                  "block rounded-md px-2 py-2.5 text-[0.95rem] font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground",
+                  item.active && "text-foreground"
+                )}
               >
-                {link.name}
+                {item.name}
               </Link>
             </li>
           ))}
-        </ul>
-        <div className="py-6">
-          <Link href="/contact" className="flex justify-center">
-            <Button
-              size="lg"
-              variant="outline"
-              className="bg-white/10"
-              onClick={() => setMobileMenuOpen((prev) => !prev)}
-            >
-              Get Started
+          <li className="pt-2">
+            <Button className="w-full" asChild>
+              <Link href="/contact" onClick={closeMenu}>
+                Get Started
+              </Link>
             </Button>
-          </Link>
-        </div>
+          </li>
+        </ul>
       </nav>
     </header>
   );

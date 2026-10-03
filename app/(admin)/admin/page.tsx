@@ -86,7 +86,7 @@ export default function AdminDashboard() {
       value: stats.subscribers,
       icon: Users,
       description: "Newsletter subscribers",
-      color: "text-blue-600",
+      color: "text-primary",
     },
     {
       title: "Contact Submissions",
@@ -100,7 +100,7 @@ export default function AdminDashboard() {
       value: stats.chatSessions,
       icon: MessageSquare,
       description: "Live chat sessions",
-      color: "text-purple-600",
+      color: "text-secondary",
     },
     {
       title: "Newsletters Sent",
@@ -115,7 +115,7 @@ export default function AdminDashboard() {
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold">Dashboard Overview</h1>
-        <p className="text-gray-500 dark:text-gray-400 mt-2">
+        <p className="text-muted-foreground mt-2">
           Welcome back! Here's what's happening with your site.
         </p>
       </div>
@@ -143,37 +143,37 @@ export default function AdminDashboard() {
           <CardContent className="space-y-2">
             <a
               href="/admin/newsletter"
-              className="block p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              className="block p-3 rounded-lg hover:bg-accent transition-colors"
             >
               <div className="flex items-center gap-3">
                 <Send className="h-5 w-5 text-primary" />
                 <div>
                   <p className="font-medium">Send Newsletter</p>
-                  <p className="text-sm text-gray-500">Create and send email campaigns</p>
+                  <p className="text-sm text-muted-foreground">Create and send email campaigns</p>
                 </div>
               </div>
             </a>
             <a
               href="/admin/chat"
-              className="block p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              className="block p-3 rounded-lg hover:bg-accent transition-colors"
             >
               <div className="flex items-center gap-3">
                 <MessageSquare className="h-5 w-5 text-primary" />
                 <div>
                   <p className="font-medium">View Live Chats</p>
-                  <p className="text-sm text-gray-500">Respond to customer inquiries</p>
+                  <p className="text-sm text-muted-foreground">Respond to customer inquiries</p>
                 </div>
               </div>
             </a>
             <a
               href="/admin/contacts"
-              className="block p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              className="block p-3 rounded-lg hover:bg-accent transition-colors"
             >
               <div className="flex items-center gap-3">
                 <Mail className="h-5 w-5 text-primary" />
                 <div>
                   <p className="font-medium">Review Contacts</p>
-                  <p className="text-sm text-gray-500">Check contact form submissions</p>
+                  <p className="text-sm text-muted-foreground">Check contact form submissions</p>
                 </div>
               </div>
             </a>
@@ -218,21 +218,21 @@ export default function AdminDashboard() {
                 <div className="h-2 w-2 bg-green-500 rounded-full mt-2"></div>
                 <div>
                   <p className="text-sm font-medium">New subscriber joined</p>
-                  <p className="text-xs text-gray-500">2 minutes ago</p>
+                  <p className="text-xs text-muted-foreground">2 minutes ago</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <div className="h-2 w-2 bg-blue-500 rounded-full mt-2"></div>
+                <div className="h-2 w-2 bg-primary rounded-full mt-2"></div>
                 <div>
                   <p className="text-sm font-medium">Contact form submitted</p>
-                  <p className="text-xs text-gray-500">15 minutes ago</p>
+                  <p className="text-xs text-muted-foreground">15 minutes ago</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <div className="h-2 w-2 bg-purple-500 rounded-full mt-2"></div>
+                <div className="h-2 w-2 bg-secondary rounded-full mt-2"></div>
                 <div>
                   <p className="text-sm font-medium">New chat session started</p>
-                  <p className="text-xs text-gray-500">1 hour ago</p>
+                  <p className="text-xs text-muted-foreground">1 hour ago</p>
                 </div>
               </div>
             </div>

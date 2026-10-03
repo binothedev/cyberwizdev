@@ -7,8 +7,6 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { toast } from "react-hot-toast";
 import { Loader2 } from "lucide-react";
-import bcrypt from "bcryptjs";
-import { auth } from "@/auth";
 
 export default function ChangePasswordPage() {
   const [currentPassword, setCurrentPassword] = useState("");
@@ -34,16 +32,7 @@ export default function ChangePasswordPage() {
         return;
       }
 
-      // Get current session
-      const session = await auth();
-
-      if (!session?.user?.id) {
-        toast.error("Not authenticated");
-        setLoading(false);
-        return;
-      }
-
-      // Call the admin password change API
+      // Session/auth is enforced server-side by /api/admin/password
       const result = await fetch("/api/admin/password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -72,7 +61,7 @@ export default function ChangePasswordPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 p-4">
+    <div className="flex min-h-full items-center justify-center p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
           <div className="flex items-center justify-center mb-4">

@@ -50,14 +50,14 @@ export function AdminMobileNav() {
       </Button>
 
       <Sheet open={open} onOpenChange={setOpen}>
-        <SheetContent side="left" className="w-72 p-0">
+        <SheetContent side="left" className="w-[85vw] max-w-72 border-r border-border bg-surface p-0">
           <SheetTitle className="sr-only">Admin Navigation</SheetTitle>
           <div className="flex flex-col h-full">
-            <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+            <div className="p-6 border-b border-border">
               <Link href="/admin" onClick={() => setOpen(false)} className="flex items-center">
                 <Image src="/logo.png" alt="Logo" width={32} height={32} />
               </Link>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Admin Panel</p>
+              <p className="mt-1 text-sm text-muted-foreground">Admin Panel</p>
             </div>
 
             <nav className="flex-1 px-4 py-4 space-y-1 overflow-y-auto">
@@ -73,8 +73,8 @@ export function AdminMobileNav() {
                       className={cn(
                         "flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors",
                         isActive
-                          ? "bg-primary dark:bg-foreground dark:text-primary text-primary-foreground"
-                          : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                          ? "bg-primary text-primary-foreground"
+                          : "text-muted-foreground hover:bg-accent hover:text-foreground"
                       )}
                     >
                       <item.icon className="h-5 w-5" />
@@ -85,10 +85,10 @@ export function AdminMobileNav() {
               })}
             </nav>
 
-            <div className="p-4 border-t border-gray-200 dark:border-gray-700">
+            <div className="p-4 border-t border-border">
               <button
                 onClick={() => signOut({ callbackUrl: "/" })}
-                className="flex items-center gap-3 w-full px-4 py-3 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                className="flex items-center gap-3 w-full px-4 py-3 rounded-lg text-sm font-medium text-muted-foreground hover:bg-accent hover:text-destructive transition-colors"
               >
                 <LogOut className="h-5 w-5" />
                 Logout

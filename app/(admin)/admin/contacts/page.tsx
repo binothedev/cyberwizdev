@@ -122,7 +122,7 @@ export default function ContactsPage() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl md:text-3xl font-bold">Contact Form Submissions</h1>
-        <p className="text-gray-500 dark:text-gray-400 mt-2">
+        <p className="text-muted-foreground mt-2">
           View and manage contact form submissions
         </p>
       </div>
@@ -184,7 +184,7 @@ export default function ContactsPage() {
               <TableBody>
                 {contacts.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={6} className="text-center text-gray-500">
+                    <TableCell colSpan={6} className="text-center text-muted-foreground">
                       No contact submissions yet
                     </TableCell>
                   </TableRow>
@@ -192,7 +192,7 @@ export default function ContactsPage() {
                   contacts.map((contact) => (
                     <TableRow
                       key={contact.id}
-                      className="cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800"
+                      className="cursor-pointer hover:bg-accent"
                       onClick={() => handleView(contact)}
                     >
                       <TableCell className="font-medium">{contact.name}</TableCell>
@@ -234,7 +234,7 @@ export default function ContactsPage() {
                               handleDelete(contact.id);
                             }}
                           >
-                            <Trash2 className="h-4 w-4 text-red-500" />
+                            <Trash2 className="h-4 w-4 text-destructive" />
                           </Button>
                         </div>
                       </TableCell>
@@ -248,7 +248,7 @@ export default function ContactsPage() {
       </Card>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="max-w-2xl bg-gray-50 dark:bg-gray-900">
+        <DialogContent className="max-w-2xl">
           <DialogHeader>
             <DialogTitle>Contact Submission Details</DialogTitle>
             <DialogDescription>
@@ -259,23 +259,23 @@ export default function ContactsPage() {
             <div className="space-y-4">
               <div>
                 <label className="text-sm font-semibold">Name</label>
-                <p className="text-sm text-gray-600 dark:text-gray-400">{selectedContact.name}</p>
+                <p className="text-sm text-muted-foreground">{selectedContact.name}</p>
               </div>
               <div>
                 <label className="text-sm font-semibold">Email</label>
-                <p className="text-sm text-gray-600 dark:text-gray-400">{selectedContact.email}</p>
+                <p className="text-sm text-muted-foreground">{selectedContact.email}</p>
               </div>
               <div>
                 <label className="text-sm font-semibold">Phone</label>
-                <p className="text-sm text-gray-600 dark:text-gray-400">{selectedContact.phone}</p>
+                <p className="text-sm text-muted-foreground">{selectedContact.phone}</p>
               </div>
               <div>
                 <label className="text-sm font-semibold">Message</label>
-                <p className="text-sm text-gray-600 dark:text-gray-400 whitespace-pre-wrap">
+                <p className="text-sm text-muted-foreground whitespace-pre-wrap">
                   {selectedContact.message}
                 </p>
               </div>
-              <div className="flex gap-2 pt-4">
+              <div className="flex flex-wrap gap-2 pt-4">
                 <Button
                   onClick={() => window.open(`mailto:${selectedContact.email}`)}
                   className="gap-2"

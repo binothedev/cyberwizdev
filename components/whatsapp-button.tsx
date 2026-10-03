@@ -18,7 +18,7 @@ export default function WhatsAppButton() {
   return (
     <Button
       onClick={handleClick}
-      className="fixed bottom-28 right-6 h-14 w-14 rounded-full shadow-lg z-40 text-green-500 bg-white hover:text-green-600"
+      className="fixed bottom-28 right-6 h-14 w-14 rounded-full shadow-lg z-40 text-green-600 bg-surface border border-border hover:text-green-700"
       size="icon"
       aria-label="Chat on WhatsApp"
       variant="none"

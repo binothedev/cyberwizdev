@@ -1,10 +1,7 @@
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "react-hot-toast";
 import { LoadingProvider } from "@/components/LoadingContext";
-import { Open_Sans } from "next/font/google";
 import "./globals.css";
-
-const openSans = Open_Sans({ subsets: ["latin"], variable: "--font-sans" });
 
 export default function RootLayout({
   children,
@@ -12,11 +9,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="dark" style={{ colorScheme: "dark" }}>
+    <html lang="en" className="dark" suppressHydrationWarning>
       <head>
         <link rel="icon" href="/favicon.ico" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap"
+          rel="stylesheet"
+        />
       </head>
-      <body className={`${openSans.variable} font-sans`}>
+      <body className="font-sans antialiased">
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -24,8 +31,8 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <LoadingProvider>
-          <Toaster />
-          {children}   
+            <Toaster />
+            {children}
           </LoadingProvider>
         </ThemeProvider>
       </body>

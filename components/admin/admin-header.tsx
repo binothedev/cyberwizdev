@@ -2,6 +2,7 @@
 "use client";
 
 import { Bell } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -21,31 +22,34 @@ interface AdminHeaderProps {
 }
 
 export default function AdminHeader({ user }: AdminHeaderProps) {
+  const router = useRouter();
+
   return (
-    <header className="bg-background border-b border-gray-200 dark:border-gray-700 px-6 py-4 pl-14 md:pl-6">
-      <div className="flex items-center justify-between">
+    <header className="border-b border-border bg-surface py-3 pl-14 pr-4 md:py-4 md:pl-6 md:pr-6">
+      <div className="flex items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+          <h2 className="text-lg font-bold text-foreground sm:text-2xl">
             Admin Dashboard
           </h2>
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 sm:gap-4">
           <Button variant="ghost" size="icon" className="relative">
             <Bell className="h-5 w-5" />
-            <span className="absolute top-1 right-1 h-2 w-2 bg-red-500 rounded-full"></span>
+            <span className="absolute top-1 right-1 h-2 w-2 bg-destructive rounded-full"></span>
+            <span className="sr-only">Notifications</span>
           </Button>
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="flex items-center gap-2">
-                <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white font-semibold">
+                <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-primary-foreground font-semibold">
                   {user?.name?.charAt(0).toUpperCase() || "A"}
                 </div>
                 <span className="hidden md:inline">{user?.name || "Admin"}</span>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
+            <DropdownMenuContent align="end" className="w-56 max-w-[calc(100vw-2rem)]">
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem className="cursor-pointer">
@@ -56,14 +60,14 @@ export default function AdminHeader({ user }: AdminHeaderProps) {
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
-                href="/admin/change-password"
                 className="cursor-pointer"
+                onClick={() => router.push("/admin/change-password")}
               >
                 Change Password
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
-                className="cursor-pointer text-red-600" // Changed from text-red-600 to text-red-500
+                className="cursor-pointer text-destructive"
                 onClick={() => logout()}
               >
                 Logout

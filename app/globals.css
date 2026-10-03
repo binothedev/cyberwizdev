@@ -1,58 +1,124 @@
 @import "tailwindcss";
 @tailwind utilities;
 
+/*
+ * Brand tokens — CyberWizDev theme (single source of truth).
+ * Light values come from the design spec; .dark mirrors them for dark mode.
+ * Every shadcn/Tailwind token below is an alias of these, so changing a
+ * brand token re-themes the whole app (site + admin dashboard).
+ */
 :root {
-  --background: 0 0% 100%;
-  --foreground: 222 47% 11%;
-  --primary: #2563eb;
-  --secondary: #9333ea;
-  --accent: #7c3aed;
-  --card: 0 0% 100%;
-  --card-foreground: 222 47% 11%;
-  --popover: 0 0% 100%;
-  --popover-foreground: 222 47% 11%;
+  color-scheme: light;
+  --bg: #f6f8fc;
+  --surface: #ffffff;
+  --line: #dbe2f0;
+  --text: #0b1222;
+  --muted-text: #55627f;
+  --a: #0891b2;
+  --b: #6d4aff;
+  --glow: rgba(8, 145, 178, 0.12);
+  --muted: #eef2f9;
+
+  /* shadcn/ui aliases */
+  --background: var(--bg);
+  --foreground: var(--text);
+  --card: var(--surface);
+  --card-foreground: var(--text);
+  --popover: var(--surface);
+  --popover-foreground: var(--text);
+  --primary: var(--a);
+  --primary-foreground: #ffffff;
+  --secondary: var(--b);
+  --secondary-foreground: #ffffff;
+  --muted-foreground: var(--muted-text);
+  --accent: #e5f4fa;
+  --accent-foreground: var(--a);
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
+  --border: var(--line);
+  --input: var(--line);
+  --ring: var(--a);
   --radius: 0.75rem;
+
+  --chart-1: #0891b2;
+  --chart-2: #6d4aff;
+  --chart-3: #22d3ee;
+  --chart-4: #8b6cff;
+  --chart-5: #0ea5e9;
 }
 
 .dark {
-  --background: 222 47% 11%;
-  --foreground: 210 40% 98%;
-  --card: 222 47% 11%;
-  --card-foreground: 210 40% 98%;
-  --popover: 222 47% 15%;
-  --popover-foreground: 210 40% 98%;
+  color-scheme: dark;
+  --bg: #0a0e1a;
+  --surface: #121829;
+  --line: #1f2942;
+  --text: #e6ecf8;
+  --muted-text: #8a96b3;
+  --a: #22d3ee;
+  --b: #8b6cff;
+  --glow: rgba(34, 211, 238, 0.14);
+  --muted: #1a2135;
+
+  /* shadcn/ui aliases */
+  --background: var(--bg);
+  --foreground: var(--text);
+  --card: var(--surface);
+  --card-foreground: var(--text);
+  --popover: var(--surface);
+  --popover-foreground: var(--text);
+  --primary: var(--a);
+  --primary-foreground: #06202a;
+  --secondary: var(--b);
+  --secondary-foreground: #ffffff;
+  --muted-foreground: var(--muted-text);
+  --accent: rgba(34, 211, 238, 0.12);
+  --accent-foreground: var(--a);
+  --destructive: #f87171;
+  --destructive-foreground: #06202a;
+  --border: var(--line);
+  --input: var(--line);
+  --ring: var(--a);
 }
 
-* {
-  @apply border-border;
-}
+/*
+ * Element defaults live in @layer base so Tailwind utilities (utilities layer)
+ * can override them — e.g. the landing hero's text-[clamp(...)] h1 sizing.
+ */
+@layer base {
+  * {
+    @apply border-border;
+  }
 
-body {
-  @apply bg-background text-foreground;
-  font-feature-settings: "rlig" 1, "calt" 1;
-}
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "cal t" 1;
+  }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  @apply font-bold tracking-tight bg-clip-text dark:text-transparent bg-gradient-to-r from-secondary to-blue-600
-}
-h1 {
-  @apply text-4xl;
-}
-h2 {
-  @apply text-3xl;
-}
-h3 {
-  @apply text-2xl;
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-bold tracking-tight text-foreground;
+  }
+  h1 {
+    @apply text-4xl;
+  }
+  h2 {
+    @apply text-3xl;
+  }
+  h3 {
+    @apply text-2xl;
+  }
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-line: var(--line);
+  --color-glow: var(--glow);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
@@ -75,6 +141,12 @@ h3 {
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
+
+  --font-sans: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  /* Enables the `shadow-glow` utility (spec: .btn.p:hover box-shadow) */
+  --shadow-glow: 0 8px 24px var(--glow);
 
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 2px);
@@ -110,5 +182,13 @@ h3 {
   }
   .animate-accordion-up {
     animation: accordion-up 0.2s ease-out;
+  }
+
+  /* Gradient text — cyan → purple brand treatment (spec: h1 em / .n / .logo) */
+  .text-gradient {
+    background: linear-gradient(135deg, var(--a), var(--b));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
   }
 }

@@ -22,28 +22,28 @@ const values = [
     description:
       "We put our clients first, ensuring their success through dedicated support and tailored solutions.",
     icon: Users,
-    color: "from-blue-400 to-blue-600",
+    color: "from-primary to-secondary",
   },
   {
     title: "Innovation",
     description:
       "We stay ahead of technology trends to deliver cutting-edge solutions that drive growth.",
     icon: Lightbulb,
-    color: "from-yellow-400 to-orange-500",
+    color: "from-primary to-secondary",
   },
   {
     title: "Excellence",
     description:
       "We maintain the highest standards of quality in every project we undertake.",
     icon: Target,
-    color: "from-green-400 to-green-600",
+    color: "from-primary to-secondary",
   },
   {
     title: "Security",
     description:
       "We prioritize data security and privacy in all our solutions and operations.",
     icon: Shield,
-    color: "from-purple-400 to-purple-600",
+    color: "from-primary to-secondary",
   },
 ];
 
@@ -112,9 +112,9 @@ export default function AboutPageClient() {
   return (
     <div className="pt-20 overflow-hidden">
       {/* Hero Section */}
-      <section className="relative min-h-[100vh] bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 flex items-center">
+      <section className="relative min-h-[100vh] bg-background flex items-center">
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute inset-0 bg-black/40 z-10" />
+          <div className="absolute inset-0 bg-background/80 z-10" />
           <Image
             src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80"
             alt="A diverse team of professionals collaborating in a modern office"
@@ -126,9 +126,9 @@ export default function AboutPageClient() {
 
         {/* Floating Elements */}
         <div className="absolute inset-0 z-20">
-          <div className="absolute top-20 left-10 w-20 h-20 bg-blue-500/20 rounded-full animate-pulse" />
-          <div className="absolute bottom-32 right-20 w-16 h-16 bg-purple-500/20 rounded-full animate-bounce" />
-          <div className="absolute top-1/2 right-10 w-12 h-12 bg-yellow-500/20 rounded-full animate-ping" />
+          <div className="absolute top-20 left-10 w-20 h-20 bg-primary/20 rounded-full animate-pulse" />
+          <div className="absolute bottom-32 right-20 w-16 h-16 bg-secondary/20 rounded-full animate-bounce" />
+          <div className="absolute top-1/2 right-10 w-12 h-12 bg-primary/20 rounded-full animate-ping" />
         </div>
 
         <div
@@ -136,13 +136,13 @@ export default function AboutPageClient() {
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
           }`}
         >
-          <div className="inline-block mb-6 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-white/90 text-sm font-medium border border-white/20">
+          <div className="inline-block mb-6 px-4 py-2 bg-surface/70 backdrop-blur-sm rounded-full text-foreground text-sm font-medium border border-border">
             Transforming Ideas into Digital Reality
           </div>
-          <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 bg-clip-text bg-gradient-to-r from-white to-blue-200">
+          <h1 className="text-5xl md:text-7xl font-bold text-foreground mb-6">
             About CyberWizDev
           </h1>
-          <p className="text-xl md:text-2xl text-gray-200 max-w-4xl mx-auto leading-relaxed">
+          <p className="text-xl md:text-2xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
             We are a team of passionate developers, designers, and strategists
             dedicated to transforming businesses through innovative software
             solutions.
@@ -150,14 +150,14 @@ export default function AboutPageClient() {
           <div className="mt-12 flex flex-col sm:flex-row gap-4 justify-center">
             <Button
               size="lg"
-              className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-4 text-lg"
             >
               Our Story <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
             <Button
               variant="outline"
               size="lg"
-              className="border-white/30 hover:text-white hover:bg-white/10 px-8 py-4 text-lg"
+              className="hover:bg-accent px-8 py-4 text-lg"
             >
               Meet Our Team
             </Button>
@@ -166,9 +166,9 @@ export default function AboutPageClient() {
       </section>
 
       {/* Stats Section */}
-      <section className="py-16 bg-white relative -mt-20 z-40">
+      <section className="py-16 bg-background relative -mt-20 z-40">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="bg-white rounded-2xl shadow-2xl p-8 md:p-12">
+          <div className="bg-surface rounded-2xl shadow-2xl p-8 md:p-12">
             <div className="grid md:grid-cols-3 gap-8 text-center">
               {stats.map((stat, index) => (
                 <div
@@ -182,14 +182,14 @@ export default function AboutPageClient() {
                   }`}
                 >
                   <div className="flex justify-center mb-4">
-                    <div className="p-4 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full">
+                    <div className="p-4 bg-gradient-to-br from-primary to-secondary rounded-full">
                       <stat.icon className="h-8 w-8 text-white" />
                     </div>
                   </div>
-                  <div className="text-4xl font-bold text-gray-900 mb-2">
+                  <div className="text-4xl font-bold text-foreground mb-2">
                     {stat.number}
                   </div>
-                  <div className="text-gray-600 font-medium">{stat.label}</div>
+                  <div className="text-muted-foreground font-medium">{stat.label}</div>
                 </div>
               ))}
             </div>
@@ -198,13 +198,13 @@ export default function AboutPageClient() {
       </section>
 
       {/* Journey Timeline Section */}
-      <section className="py-24 bg-gradient-to-br from-gray-50 to-blue-50">
+      <section className="py-24 bg-muted">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold mb-6">
               Our Journey
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
               From humble beginnings to industry leadership, discover the
               milestones that shaped our story.
             </p>
@@ -217,25 +217,25 @@ export default function AboutPageClient() {
                   key={milestone.year}
                   className={`flex items-center gap-6 p-6 rounded-xl transition-all duration-500 cursor-pointer ${
                     activeTimeline === index
-                      ? "bg-white shadow-lg scale-105 border-l-4 border-blue-500"
-                      : "bg-white/50 hover:bg-white/80"
+                      ? "bg-surface shadow-lg scale-105 border-l-4 border-primary"
+                      : "bg-surface/50 hover:bg-surface/80"
                   }`}
                   onClick={() => setActiveTimeline(index)}
                 >
                   <div
-                    className={`flex-shrink-0 w-16 h-16 rounded-full flex items-center justify-center font-bold text-white transition-all duration-300 ${
+                    className={`flex-shrink-0 w-16 h-16 rounded-full flex items-center justify-center font-bold transition-all duration-300 ${
                       activeTimeline === index
-                        ? "bg-gradient-to-br from-blue-500 to-purple-600 scale-110"
-                        : "bg-gray-400"
+                        ? "bg-gradient-to-br from-primary to-secondary scale-110 text-white"
+                        : "bg-muted text-muted-foreground"
                     }`}
                   >
                     {milestone.year}
                   </div>
                   <div>
-                    <h3 className="font-semibold text-lg text-gray-900">
+                    <h3 className="font-semibold text-lg text-foreground">
                       {milestone.event}
                     </h3>
-                    <p className="text-gray-600">{milestone.description}</p>
+                    <p className="text-muted-foreground">{milestone.description}</p>
                   </div>
                 </div>
               ))}
@@ -250,7 +250,7 @@ export default function AboutPageClient() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
               <div className="absolute bottom-6 left-6 text-white">
-                <h3 className="text-2xl font-bold mb-2">Building the Future</h3>
+                <h3 className="text-2xl font-bold mb-2 text-white">Building the Future</h3>
                 <p className="text-white/90">One innovation at a time</p>
               </div>
             </div>
@@ -259,11 +259,11 @@ export default function AboutPageClient() {
       </section>
 
       {/* Values Section */}
-      <section className="py-24 bg-white">
+      <section className="py-24 bg-background">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-primary mb-6">Our Core Values</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
               These fundamental principles guide our decisions, shape our
               culture, and drive us to deliver exceptional results.
             </p>
@@ -273,7 +273,7 @@ export default function AboutPageClient() {
             {values.map((value, index) => (
               <Card
                 key={value.title}
-                className="group border-none shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 bg-white overflow-hidden"
+                className="group border-none shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 bg-surface overflow-hidden"
               >
                 <CardContent className="pt-8 pb-6 relative">
                   <div
@@ -288,10 +288,10 @@ export default function AboutPageClient() {
                     </div>
                   </div>
 
-                  <h3 className="text-xl font-bold mb-4 text-center text-gray-900">
+                  <h3 className="text-xl font-bold mb-4 text-center text-foreground">
                     {value.title}
                   </h3>
-                  <p className="text-gray-600 text-center leading-relaxed">
+                  <p className="text-muted-foreground text-center leading-relaxed">
                     {value.description}
                   </p>
 
@@ -308,11 +308,11 @@ export default function AboutPageClient() {
       </section>
 
       {/* Team Section */}
-      <section className="py-24 bg-gradient-to-br from-gray-50 to-purple-50">
+      <section className="py-24 bg-muted">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold mb-6">Meet Our Visionary</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
               The talented individual driving our mission to transform
               businesses through technology.
             </p>
@@ -322,7 +322,7 @@ export default function AboutPageClient() {
             {team.map((member) => (
               <Card
                 key={member.name}
-                className="max-w-md border-none shadow-2xl overflow-hidden bg-white group hover:shadow-3xl transition-all duration-500"
+                className="max-w-md border-none shadow-2xl overflow-hidden bg-surface group hover:shadow-3xl transition-all duration-500"
               >
                 <div className="relative h-80 overflow-hidden">
                   <Image
@@ -336,26 +336,26 @@ export default function AboutPageClient() {
 
                 <CardContent className="p-8">
                   <div className="text-center mb-6">
-                    <h3 className="text-2xl font-bold mb-2 text-gray-900">
+                    <h3 className="text-2xl font-bold mb-2 text-foreground">
                       {member.name}
                     </h3>
-                    <p className="text-blue-600 font-semibold text-lg mb-4">
+                    <p className="text-primary font-semibold text-lg mb-4">
                       {member.role}
                     </p>
-                    <p className="text-gray-600 leading-relaxed">
+                    <p className="text-muted-foreground leading-relaxed">
                       {member.bio}
                     </p>
                   </div>
 
                   <div className="space-y-3">
-                    <h4 className="font-semibold text-gray-900 text-center">
+                    <h4 className="font-semibold text-foreground text-center">
                       Expertise
                     </h4>
                     <div className="flex flex-wrap gap-2 justify-center">
                       {member.expertise.map((skill) => (
                         <span
                           key={skill}
-                          className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium hover:bg-blue-200 transition-colors cursor-default"
+                          className="px-3 py-1 bg-muted text-foreground rounded-full text-sm font-medium hover:bg-accent transition-colors cursor-default"
                         >
                           {skill}
                         </span>
@@ -370,20 +370,20 @@ export default function AboutPageClient() {
       </section>
 
       {/* CTA Section */}
-      <section className="relative py-24 bg-gradient-to-br from-blue-900 via-purple-900 to-gray-900 overflow-hidden">
+      <section className="relative py-24 bg-surface overflow-hidden">
         {/* Background Pattern */}
         <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-0 left-0 w-72 h-72 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl animate-pulse" />
-          <div className="absolute top-0 right-0 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl animate-pulse animation-delay-2000" />
-          <div className="absolute bottom-0 left-1/2 w-72 h-72 bg-pink-500 rounded-full mix-blend-multiply filter blur-xl animate-pulse animation-delay-4000" />
+          <div className="absolute top-0 left-0 w-72 h-72 bg-primary rounded-full mix-blend-multiply filter blur-xl animate-pulse" />
+          <div className="absolute top-0 right-0 w-72 h-72 bg-secondary rounded-full mix-blend-multiply filter blur-xl animate-pulse animation-delay-2000" />
+          <div className="absolute bottom-0 left-1/2 w-72 h-72 bg-primary rounded-full mix-blend-multiply filter blur-xl animate-pulse animation-delay-4000" />
         </div>
 
         <div className="relative max-w-7xl mx-auto px-6 text-center">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
               Ready to Transform Your Business?
             </h2>
-            <p className="text-xl text-gray-200 mb-12 leading-relaxed">
+            <p className="text-xl text-muted-foreground mb-12 leading-relaxed">
               Let's collaborate to bring your vision to life with cutting-edge
               technology solutions that drive growth and innovation.
             </p>
@@ -391,7 +391,7 @@ export default function AboutPageClient() {
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
               <Button
                 size="lg"
-                className="bg-white text-gray-900 hover:bg-gray-100 px-8 py-4 text-lg font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
+                className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-4 text-lg font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
                 asChild
               >
                 <Link href="/contact">
@@ -402,7 +402,7 @@ export default function AboutPageClient() {
               <Button
                 variant="outline"
                 size="lg"
-                className="border-white/30 text-white hover:bg-white/10 px-8 py-4 text-lg backdrop-blur-sm"
+                className="hover:bg-accent px-8 py-4 text-lg backdrop-blur-sm"
                 asChild
               >
                 <Link href="/portfolio">View Our Work</Link>

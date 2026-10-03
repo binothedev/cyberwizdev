@@ -96,7 +96,7 @@ export default function SubscribersPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <h1 className="text-2xl md:text-3xl font-bold">Newsletter Subscribers</h1>
-          <p className="text-gray-500 dark:text-gray-400 mt-2">
+          <p className="text-muted-foreground mt-2">
             Manage your email subscribers
           </p>
         </div>
@@ -161,7 +161,7 @@ export default function SubscribersPage() {
               <TableBody>
                 {subscribers.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={4} className="text-center text-gray-500">
+                    <TableCell colSpan={4} className="text-center text-muted-foreground">
                       No subscribers yet
                     </TableCell>
                   </TableRow>
@@ -183,7 +183,7 @@ export default function SubscribersPage() {
                           size="sm"
                           onClick={() => handleDelete(subscriber.id)}
                         >
-                          <Trash2 className="h-4 w-4 text-red-500" />
+                          <Trash2 className="h-4 w-4 text-destructive" />
                         </Button>
                       </TableCell>
                     </TableRow>

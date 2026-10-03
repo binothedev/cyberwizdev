@@ -131,7 +131,7 @@ function getStatusColor(status: string) {
     case 'maintenance': return 'text-yellow-600 bg-yellow-100';
     case 'degraded': return 'text-orange-600 bg-orange-100';
     case 'outage': return 'text-red-600 bg-red-100';
-    default: return 'text-gray-600 bg-gray-100';
+    default: return 'text-muted-foreground bg-muted';
   }
 }
 
@@ -147,16 +147,16 @@ function getStatusIcon(status: string) {
 
 function getSeverityColor(severity: string) {
   switch (severity) {
-    case 'low': return 'bg-blue-500';
+    case 'low': return 'bg-primary';
     case 'medium': return 'bg-orange-500';
     case 'high': return 'bg-red-500';
-    default: return 'bg-gray-500';
+    default: return 'bg-secondary';
   }
 }
 
 export default function StatusPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100">
+    <div className="min-h-screen bg-background">
       {/* Hero Section */}
       <section className="relative pt-20 pb-32 overflow-hidden">
         <div className="absolute inset-0">
@@ -167,32 +167,32 @@ export default function StatusPage() {
             className="object-cover scale-105"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-900/95 via-slate-800/85 to-slate-900/95"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-background/95 via-background/85 to-background/95"></div>
         </div>
         
         <div className="relative max-w-7xl mx-auto px-6 pt-16 text-center">
-          <div className="inline-flex items-center px-6 py-3 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 mb-8">
-            <Activity className="h-5 w-5 text-[#3498db] mr-2" />
-            <span className="text-white/90 font-medium">Real-time Monitoring</span>
+          <div className="inline-flex items-center px-6 py-3 rounded-full bg-surface/70 backdrop-blur-sm border border-border mb-8">
+            <Activity className="h-5 w-5 text-primary mr-2" />
+            <span className="text-foreground font-medium">Real-time Monitoring</span>
           </div>
           
-          <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
+          <h1 className="text-5xl md:text-7xl font-bold text-foreground mb-6 leading-tight">
             System
-            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[#3498db] to-cyan-400">
+            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">
               Status
             </span>
           </h1>
           
-          <p className="text-xl text-white/80 max-w-3xl mx-auto mb-12 leading-relaxed">
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-12 leading-relaxed">
             Stay informed about the availability and performance of all CyberWizDev services.
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="#services-status" className="group inline-flex items-center px-8 py-4 bg-gradient-to-r from-[#3498db] to-cyan-400 text-white rounded-full font-semibold hover:shadow-xl hover:shadow-[#3498db]/25 transition-all duration-300 hover:scale-105">
+            <a href="#services-status" className="group inline-flex items-center px-8 py-4 bg-primary text-primary-foreground rounded-full font-semibold hover:shadow-[0_14px_34px_var(--glow)] transition-all duration-300 hover:scale-105">
               View Service Status
               <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
             </a>
-            <a href="#past-incidents" className="inline-flex items-center px-8 py-4 bg-white/10 backdrop-blur-sm text-white rounded-full font-semibold border border-white/20 hover:bg-white/20 transition-all duration-300">
+            <a href="#past-incidents" className="inline-flex items-center px-8 py-4 bg-surface/70 backdrop-blur-sm text-foreground rounded-full font-semibold border border-border hover:bg-accent transition-all duration-300">
               <Calendar className="mr-2 h-5 w-5" />
               Past Incidents
             </a>
@@ -203,17 +203,17 @@ export default function StatusPage() {
       {/* Overall Status & Metrics */}
       <section className="relative -mt-20 pb-24">
         <div className="max-w-7xl mx-auto px-6">
-          <Card className="border-0 shadow-xl overflow-hidden bg-white/90 backdrop-blur-sm">
+          <Card className="border-0 shadow-xl overflow-hidden bg-surface/90 backdrop-blur-sm">
             <CardContent className="p-8">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold text-slate-800">Overall System Health</h2>
+                <h2 className="text-2xl font-bold text-foreground">Overall System Health</h2>
                 <Badge className="text-lg px-4 py-2 bg-green-500 text-white">All Systems Operational</Badge>
               </div>
               <div className="grid md:grid-cols-4 gap-6">
                 {metrics.map((metric) => (
-                  <div key={metric.label} className="text-center p-4 bg-slate-50 rounded-lg shadow-sm">
-                    <div className="text-sm text-slate-600 mb-1">{metric.label}</div>
-                    <div className="text-3xl font-bold text-slate-800 mb-2">{metric.value}</div>
+                  <div key={metric.label} className="text-center p-4 bg-muted rounded-lg shadow-sm">
+                    <div className="text-sm text-muted-foreground mb-1">{metric.label}</div>
+                    <div className="text-3xl font-bold text-foreground mb-2">{metric.value}</div>
                     <div className={`flex items-center justify-center text-sm ${metric.trend === 'up' ? 'text-green-600' : 'text-red-600'}`}>
                       {metric.trend === 'up' ? <TrendingUp className="h-4 w-4 mr-1" /> : <TrendingUp className="h-4 w-4 mr-1 rotate-180" />}
                       {metric.change}
@@ -227,11 +227,11 @@ export default function StatusPage() {
       </section>
 
       {/* Services Status */}
-      <section id="services-status" className="py-24 bg-slate-50">
+      <section id="services-status" className="py-24 bg-muted">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-slate-800 mb-4">Service Components</h2>
-            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+            <h2 className="text-4xl font-bold text-foreground mb-4">Service Components</h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Detailed status of individual services and their performance metrics.
             </p>
           </div>
@@ -244,22 +244,22 @@ export default function StatusPage() {
                   <CardContent className="p-6">
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center">
-                        <service.icon className="h-6 w-6 text-[#3498db] mr-3" />
-                        <h3 className="text-xl font-bold text-slate-800">{service.name}</h3>
+                        <service.icon className="h-6 w-6 text-primary mr-3" />
+                        <h3 className="text-xl font-bold text-foreground">{service.name}</h3>
                       </div>
                       <Badge className={`${getStatusColor(service.status)} text-sm`}>
                         <Icon className="h-4 w-4 mr-1" />
                         {service.status.charAt(0).toUpperCase() + service.status.slice(1)}
                       </Badge>
                     </div>
-                    <p className="text-slate-600 mb-4">{service.description}</p>
+                    <p className="text-muted-foreground mb-4">{service.description}</p>
                     <div className="grid grid-cols-2 gap-2 text-sm">
-                      <div className="flex items-center text-slate-700">
+                      <div className="flex items-center text-foreground">
                         <TrendingUp className="h-4 w-4 mr-2 text-green-500" />
                         Uptime: <span className="font-medium ml-1">{service.uptime}</span>
                       </div>
-                      <div className="flex items-center text-slate-700">
-                        <Zap className="h-4 w-4 mr-2 text-purple-500" />
+                      <div className="flex items-center text-foreground">
+                        <Zap className="h-4 w-4 mr-2 text-secondary" />
                         Response: <span className="font-medium ml-1">{service.responseTime}</span>
                       </div>
                     </div>
@@ -275,18 +275,18 @@ export default function StatusPage() {
       <section id="past-incidents" className="py-24">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-slate-800 mb-4">Past Incidents & History</h2>
-            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+            <h2 className="text-4xl font-bold text-foreground mb-4">Past Incidents & History</h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               A transparent log of all past incidents, resolutions, and scheduled maintenance.
             </p>
           </div>
 
           <div className="space-y-8">
             {incidents.map((incident) => (
-              <Card key={incident.title} className="border-0 shadow-lg bg-white">
+              <Card key={incident.title} className="border-0 shadow-lg bg-surface">
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-xl font-bold text-slate-800">{incident.title}</h3>
+                    <h3 className="text-xl font-bold text-foreground">{incident.title}</h3>
                     <div className="flex items-center gap-2">
                       <Badge className={`${getStatusColor(incident.status)} text-sm`}>
                         {incident.status.charAt(0).toUpperCase() + incident.status.slice(1)}
@@ -296,18 +296,18 @@ export default function StatusPage() {
                       </span>
                     </div>
                   </div>
-                  <p className="text-slate-600 mb-4">{incident.description}</p>
-                  <p className="text-sm text-slate-500 mb-4">
+                  <p className="text-muted-foreground mb-4">{incident.description}</p>
+                  <p className="text-sm text-muted-foreground mb-4">
                     <Clock className="h-4 w-4 inline-block mr-1" />
                     Start Time: {incident.startTime}
                     {incident.endTime && ` | End Time: ${incident.endTime}`}
                   </p>
                   
-                  <div className="space-y-3 border-l-2 border-slate-200 pl-4">
+                  <div className="space-y-3 border-l-2 border-border pl-4">
                     {incident.updates.map((update, index) => (
                       <div key={index}>
-                        <p className="text-sm font-medium text-slate-800">{update.time}</p>
-                        <p className="text-sm text-slate-600">{update.message}</p>
+                        <p className="text-sm font-medium text-foreground">{update.time}</p>
+                        <p className="text-sm text-muted-foreground">{update.message}</p>
                       </div>
                     ))}
                   </div>
@@ -321,29 +321,29 @@ export default function StatusPage() {
       {/* CTA Section */}
       <section className="relative py-24 overflow-hidden">
         <div className="absolute inset-0">
-          <div className="w-full h-full bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900"></div>
+          <div className="w-full h-full bg-surface"></div>
         </div>
         
         <div className="relative max-w-4xl mx-auto px-6 text-center">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+          <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
             Need More Information?
           </h2>
-          <p className="text-xl text-white/80 mb-12 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-xl text-muted-foreground mb-12 max-w-2xl mx-auto leading-relaxed">
             If you have any questions or require further assistance regarding our service status, please contact our support team.
           </p>
           
           <div className="flex flex-col sm:flex-row gap-6 justify-center">
             <a 
               href="/support" 
-              className="group inline-flex items-center px-8 py-4 bg-gradient-to-r from-[#3498db] to-cyan-400 text-white rounded-full font-semibold hover:shadow-xl hover:shadow-[#3498db]/25 transition-all duration-300 hover:scale-105 text-lg"
+              className="group inline-flex items-center px-8 py-4 bg-primary text-primary-foreground rounded-full font-semibold hover:shadow-[0_14px_34px_var(--glow)] transition-all duration-300 hover:scale-105 text-lg"
             >
               Contact Support
               <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
             </a>
-            
+             
             <a 
               href="/docs" 
-              className="inline-flex items-center px-8 py-4 bg-white/10 backdrop-blur-sm text-white rounded-full font-semibold border border-white/20 hover:bg-white/20 transition-all duration-300 text-lg"
+              className="inline-flex items-center px-8 py-4 bg-surface/70 backdrop-blur-sm text-foreground rounded-full font-semibold border border-border hover:bg-accent transition-all duration-300 text-lg"
             >
               View Documentation
             </a>
@@ -351,8 +351,8 @@ export default function StatusPage() {
         </div>
 
         {/* Decorative Elements */}
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-[#3498db]/20 rounded-full blur-3xl"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-cyan-400/20 rounded-full blur-3xl"></div>
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary/10 rounded-full blur-3xl"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-secondary/10 rounded-full blur-3xl"></div>
       </section>
     </div>
   );

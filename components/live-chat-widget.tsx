@@ -178,7 +178,7 @@ export default function LiveChatWidget() {
         <Button
           aria-label="Open live chat"
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-lg z-50 bg-[#3498db] hover:bg-[#2980b9] text-white"
+          className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-lg z-50 bg-primary hover:bg-primary/90 text-primary-foreground"
           size="icon"
         >
           <MessageCircle className="h-6 w-6" />
@@ -186,12 +186,12 @@ export default function LiveChatWidget() {
       )}
 
       {isOpen && (
-        <Card className="fixed bottom-6 right-6 w-[calc(100vw-3rem)] max-w-96 h-[500px] max-h-[calc(100vh-3rem)] shadow-2xl z-50 flex flex-col bg-white">
-          <div className="bg-[#3498db] text-white p-4 rounded-t-lg flex items-center justify-between">
+        <Card className="fixed bottom-6 right-6 w-[calc(100vw-3rem)] max-w-96 h-[500px] max-h-[calc(100vh-3rem)] shadow-2xl z-50 flex flex-col bg-surface border-border">
+          <div className="bg-primary text-primary-foreground p-4 rounded-t-lg flex items-center justify-between">
             <div className="flex items-center gap-2">
               <MessageCircle className="h-5 w-5" />
               <div>
-                <h3 className="font-semibold">Live Chat</h3>
+                <h3 className="font-semibold text-primary-foreground">Live Chat</h3>
                 <p className="text-xs opacity-90">We typically reply in minutes</p>
               </div>
             </div>
@@ -200,7 +200,7 @@ export default function LiveChatWidget() {
               variant="ghost"
               size="icon"
               onClick={() => setIsOpen(false)}
-              className="text-white hover:bg-white/20"
+              className="text-primary-foreground hover:bg-primary-foreground/20"
             >
               <X className="h-5 w-5" />
             </Button>
@@ -209,7 +209,7 @@ export default function LiveChatWidget() {
           {!isStarted ? (
             <div className="flex-1 p-6 flex flex-col justify-center">
               <h4 className="font-semibold text-lg mb-2">Start a conversation</h4>
-              <p className="text-sm text-gray-500 mb-4">
+              <p className="text-sm text-muted-foreground mb-4">
                 Enter your name to begin chatting
               </p>
               <Input
@@ -219,7 +219,7 @@ export default function LiveChatWidget() {
                 onKeyDown={(e) => e.key === "Enter" && startChat()}
                 className="mb-4"
               />
-              <Button onClick={startChat} className="w-full bg-[#3498db] hover:bg-[#2980b9]">
+              <Button onClick={startChat} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
                 Start Chat
               </Button>
             </div>
@@ -227,7 +227,7 @@ export default function LiveChatWidget() {
             <>
               <div className="flex-1 overflow-y-auto p-4 space-y-4">
                 {messages.length === 0 && (
-                  <div className="h-full flex items-center justify-center text-sm text-gray-500">
+                  <div className="h-full flex items-center justify-center text-sm text-muted-foreground">
                     No messages yet — say hello!
                   </div>
                 )}
@@ -243,8 +243,8 @@ export default function LiveChatWidget() {
                     <div
                       className={`max-w-[75%] rounded-lg px-4 py-2 ${
                         msg.sender === "user"
-                          ? "bg-[#3498db] text-white"
-                          : "bg-gray-100 text-gray-800"
+                          ? "bg-primary text-primary-foreground"
+                          : "bg-muted text-foreground"
                       }`}
                     >
                       {msg.sender === "admin" && msg.senderName && (
@@ -265,7 +265,7 @@ export default function LiveChatWidget() {
                 <div ref={messagesEndRef} />
               </div>
 
-              <div className="p-4 border-t border-gray-200">
+              <div className="p-4 border-t border-border">
                 <div className="flex gap-2">
                   <Input
                     placeholder="Type your message..."
@@ -279,7 +279,7 @@ export default function LiveChatWidget() {
                     onClick={sendMessage}
                     size="icon"
                     disabled={isSending}
-                    className="bg-[#3498db] hover:bg-[#2980b9]"
+                    className="bg-primary hover:bg-primary/90 text-primary-foreground"
                   >
                     <Send className="h-4 w-4" />
                   </Button>

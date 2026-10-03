@@ -34,7 +34,14 @@
   - Configured via `postcss.config.mjs` with `@tailwindcss/postcss` plugin
   - `components.json` enables CSS variables mode
   - `tailwind-merge` v2.5.2 for conditional class joining
-  - Custom color palette: neutral gray scale with primary accent
+  - No `tailwind.config.*` file — CSS-first config lives in `app/globals.css` (`@theme inline`)
+  - Theme palette: cyan `--a`/primary (`#0891b2` light, `#22d3ee` dark) + purple `--b`/secondary (`#6d4aff` light, `#8b6cff` dark) on `#f6f8fc`/`#0a0e1a` backgrounds (see `context/coding-standards.md` for the full token table)
+
+## Fonts
+
+- **Space Grotesk**: body/display (`font-sans`), weights 400/500/700
+- **JetBrains Mono**: code, eyebrows, labels (`font-mono`), weights 400/600
+- Loaded via Google Fonts `<link>` in `app/layout.tsx` (root layout)
 
 ## Database
 

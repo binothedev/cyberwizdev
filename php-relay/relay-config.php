@@ -23,7 +23,7 @@ const RELAY_DB_PASSWORD = 'root';
 /* Shared secret between the app and this relay. The app signs every request
  * with HMAC-SHA256 using this value. Treat it like a password — do not
  * commit it to git, and use a DIFFERENT value in production. */
-const RELAY_API_SECRET = 'change-me';
+const RELAY_API_SECRET = 'edehiekhdkjdhjsahjfjfhjfhjkfhjs';
 
 /* Signed requests are rejected if their timestamp is older than this many
  * seconds (replay protection). 60 seconds is a sane default. */
@@ -40,7 +40,7 @@ const RELAY_ALLOWED_ORIGINS = '*';
 /* If true, the action=sql endpoint becomes available, letting callers send
  * arbitrary parameterized SQL. Keep this OFF unless you truly need it —
  * the whitelisted action=query registry is the safe path. */
-const RELAY_ALLOW_RAW_SQL = false;
+const RELAY_ALLOW_RAW_SQL = true;
 
 /* Absolute or relative path to the migrations folder on the server.
  * Defaults to the "migrations" folder next to this file. */

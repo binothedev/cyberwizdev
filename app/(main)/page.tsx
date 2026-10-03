@@ -1,17 +1,28 @@
 import { Metadata } from "next";
-import { TestimonialSection } from "@/components/testimonial";
 import { HeroSection } from "@/components/hero";
 import { TechnologyStack } from "@/components/stack";
 import { ServicesSection } from "@/components/services";
-import ProjectsSection from "@/components/projects-section";
-import { WhyChooseUsSection } from "@/components/why-choose-us";
-import { CaseStudiesSection } from "@/components/case-studies";
+import CaseStudiesSection from "@/components/case-studies";
+import { ProcessSection } from "@/components/process";
+import { TestimonialSection } from "@/components/testimonial";
 import { CTASection } from "@/components/cta";
+import { Project } from "@/lib/db/models/Project";
+import {
+  landingProjects,
+  projectRowToCaseStudy,
+  seedToCaseStudy,
+} from "@/lib/landing-projects";
+
+/**
+ * Case studies are read from the database on every request (the relay fetch is
+ * uncached), so admin edits and seeds show up immediately.
+ */
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Transform Your Business with Custom Software Solutions | CyberWizDev",
+  title: "CyberWizDev — Systems built to outlast the roadmap",
   description:
-    "Leading software development company specializing in web development, mobile apps, cloud solutions, and digital transformation. 500+ successful projects delivered worldwide.",
+    "We design and engineer custom software — from web platforms to enterprise systems — built to hold up as your business scales.",
   keywords: [
     "custom software development",
     "web development",
@@ -25,48 +36,36 @@ export const metadata: Metadata = {
 };
 
 const technologies = [
-  { name: "React", color: "bg-blue-500" },
-  { name: "Next.js", color: "bg-black" },
-  { name: "Node.js", color: "bg-green-600" },
-  { name: "Python", color: "bg-yellow-500" },
-  { name: "AWS", color: "bg-orange-500" },
-  { name: "Docker", color: "bg-blue-600" },
-  { name: "MongoDB", color: "bg-green-500" },
-  { name: "TypeScript", color: "bg-blue-700" },
+  { name: "React" },
+  { name: "Next.js" },
+  { name: "Node.js" },
+  { name: "Python" },
+  { name: "AWS" },
+  { name: "Docker" },
+  { name: "MongoDB" },
+  { name: "TypeScript" },
 ];
 
-const caseStudies = [
-  {
-    title: "Groove Music Studios - Creative Digital Experience",
-    description:
-      "Designed and developed an immersive portfolio website showcasing music production services with interactive audio elements and modern aesthetics",
-    results: "300% increase in client inquiries",
-    category: "Creative Portfolio",
-    duration: "2 months",
-    icon: "🎵",
-    href: "https://groovemusic.ca",
-  },
-  {
-    title: "Dipo Resort - Luxury Hospitality Platform",
-    description: "Created a comprehensive digital presence for a premium resort featuring booking systems, virtual tours, and guest experience management",
-    results: "450% boost in direct bookings",
-    category: "Hospitality & Tourism",
-    duration: "4 months", 
-    icon: "🏖️",
-    href: "https://diporesort.com",
-  },
-  {
-    title: "Jemai Interiors - Sophisticated Design Showcase",
-    description: "Crafted an elegant portfolio platform highlighting interior design projects with dynamic galleries and client testimonial integration",
-    results: "250% growth in project requests",
-    category: "Interior Design",
-    duration: "3 months",
-    icon: "🏡",
-    href: "https://www.jemai.xyz",
-  },
-];
+/**
+ * Case studies are stored as `Project` rows (seeded from the admin dashboard).
+ * Falls back to the seed object only when the DB relay is unreachable, so an
+ * outage never blanks the #work section.
+ */
+async function getCaseStudies() {
+  try {
+    const projects = await Project.findActive();
+    return projects.map(projectRowToCaseStudy);
+  } catch (error) {
+    console.error(
+      "[landing] Could not load case studies from the database:",
+      error instanceof Error ? error.message : error
+    );
+    return landingProjects.map(seedToCaseStudy);
+  }
+}
 
-export default function Home() {
+export default async function Home() {
+  const caseStudies = await getCaseStudies();
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Organization",
@@ -105,11 +104,9 @@ export default function Home() {
 
       <ServicesSection />
 
-      <ProjectsSection />
-
       <CaseStudiesSection caseStudies={caseStudies} />
 
-      <WhyChooseUsSection />
+      <ProcessSection />
 
       <TestimonialSection />
 

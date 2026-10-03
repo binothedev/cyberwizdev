@@ -36,7 +36,7 @@ export default function NewsletterEditor({ content, setContent }: NewsletterEdit
       Link.configure({
         openOnClick: false,
         HTMLAttributes: {
-          style: "color: #3498db; text-decoration: underline;",
+          style: "color: #0891b2; text-decoration: underline;",
         },
       }),
       Image,
@@ -81,14 +81,14 @@ export default function NewsletterEditor({ content, setContent }: NewsletterEdit
   };
 
   return (
-    <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
-      <div className="bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 p-2 flex flex-wrap gap-1">
+    <div className="border border-border rounded-lg overflow-hidden">
+      <div className="bg-muted border-b border-border p-2 flex flex-wrap gap-1">
         <Button
           type="button"
           variant="ghost"
           size="sm"
           onClick={() => editor.chain().focus().toggleBold().run()}
-          className={editor.isActive("bold") ? "bg-gray-200 dark:bg-gray-700" : ""}
+          className={editor.isActive("bold") ? "bg-accent" : ""}
         >
           <Bold className="h-4 w-4" />
         </Button>
@@ -97,7 +97,7 @@ export default function NewsletterEditor({ content, setContent }: NewsletterEdit
           variant="ghost"
           size="sm"
           onClick={() => editor.chain().focus().toggleItalic().run()}
-          className={editor.isActive("italic") ? "bg-gray-200 dark:bg-gray-700" : ""}
+          className={editor.isActive("italic") ? "bg-accent" : ""}
         >
           <Italic className="h-4 w-4" />
         </Button>
@@ -106,17 +106,17 @@ export default function NewsletterEditor({ content, setContent }: NewsletterEdit
           variant="ghost"
           size="sm"
           onClick={() => editor.chain().focus().toggleUnderline().run()}
-          className={editor.isActive("underline") ? "bg-gray-200 dark:bg-gray-700" : ""}
+          className={editor.isActive("underline") ? "bg-accent" : ""}
         >
           <UnderlineIcon className="h-4 w-4" />
         </Button>
-        <div className="w-px bg-gray-300 dark:bg-gray-600 mx-1" />
+        <div className="w-px bg-border mx-1" />
         <Button
           type="button"
           variant="ghost"
           size="sm"
           onClick={() => editor.chain().focus().toggleBulletList().run()}
-          className={editor.isActive("bulletList") ? "bg-gray-200 dark:bg-gray-700" : ""}
+          className={editor.isActive("bulletList") ? "bg-accent" : ""}
         >
           <List className="h-4 w-4" />
         </Button>
@@ -125,17 +125,17 @@ export default function NewsletterEditor({ content, setContent }: NewsletterEdit
           variant="ghost"
           size="sm"
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
-          className={editor.isActive("orderedList") ? "bg-gray-200 dark:bg-gray-700" : ""}
+          className={editor.isActive("orderedList") ? "bg-accent" : ""}
         >
           <ListOrdered className="h-4 w-4" />
         </Button>
-        <div className="w-px bg-gray-300 dark:bg-gray-600 mx-1" />
+        <div className="w-px bg-border mx-1" />
         <Button
           type="button"
           variant="ghost"
           size="sm"
           onClick={() => editor.chain().focus().setTextAlign("left").run()}
-          className={editor.isActive({ textAlign: "left" }) ? "bg-gray-200 dark:bg-gray-700" : ""}
+          className={editor.isActive({ textAlign: "left" }) ? "bg-accent" : ""}
         >
           <AlignLeft className="h-4 w-4" />
         </Button>
@@ -144,7 +144,7 @@ export default function NewsletterEditor({ content, setContent }: NewsletterEdit
           variant="ghost"
           size="sm"
           onClick={() => editor.chain().focus().setTextAlign("center").run()}
-          className={editor.isActive({ textAlign: "center" }) ? "bg-gray-200 dark:bg-gray-700" : ""}
+          className={editor.isActive({ textAlign: "center" }) ? "bg-accent" : ""}
         >
           <AlignCenter className="h-4 w-4" />
         </Button>
@@ -153,11 +153,11 @@ export default function NewsletterEditor({ content, setContent }: NewsletterEdit
           variant="ghost"
           size="sm"
           onClick={() => editor.chain().focus().setTextAlign("right").run()}
-          className={editor.isActive({ textAlign: "right" }) ? "bg-gray-200 dark:bg-gray-700" : ""}
+          className={editor.isActive({ textAlign: "right" }) ? "bg-accent" : ""}
         >
           <AlignRight className="h-4 w-4" />
         </Button>
-        <div className="w-px bg-gray-300 dark:bg-gray-600 mx-1" />
+        <div className="w-px bg-border mx-1" />
         <Button
           type="button"
           variant="ghost"
@@ -179,12 +179,12 @@ export default function NewsletterEditor({ content, setContent }: NewsletterEdit
           variant="ghost"
           size="sm"
           onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-          className={editor.isActive("codeBlock") ? "bg-gray-200 dark:bg-gray-700" : ""}
+          className={editor.isActive("codeBlock") ? "bg-accent" : ""}
         >
           <Code className="h-4 w-4" />
         </Button>
       </div>
-      <EditorContent editor={editor} className="bg-white dark:bg-gray-900" />
+      <EditorContent editor={editor} className="bg-surface" />
     </div>
   );
 }

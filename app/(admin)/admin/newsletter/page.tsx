@@ -56,7 +56,7 @@ export default function NewsletterPage() {
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold">Send Newsletter</h1>
-        <p className="text-gray-500 dark:text-gray-400 mt-2">
+        <p className="text-muted-foreground mt-2">
           Create and send newsletters to your subscribers
         </p>
       </div>
@@ -96,10 +96,10 @@ export default function NewsletterPage() {
               >
                 <Code
                   className={`${
-                    isRaw ? "text-primary" : "text-gray-500"
+                    isRaw ? "text-primary" : "text-muted-foreground"
                   } h-4 w-4`}
                 />
-                <span className="text-sm text-gray-500 dark:text-gray-400">
+                <span className="text-sm text-muted-foreground">
                   {isRaw ? "Raw HTML Mode" : "Rich Text Editor Mode"}
                 </span>
               </Button>
@@ -116,7 +116,7 @@ export default function NewsletterPage() {
             )}
           </div>
 
-          <div className="flex gap-4">
+          <div className="flex flex-wrap gap-2">
             <Button
               onClick={handleSendNewsletter}
               disabled={sending || !subject || !content}

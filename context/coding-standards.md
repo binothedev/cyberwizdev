@@ -117,6 +117,12 @@ NextResponse.json({ success: true, data }, { status: 200 })
 NextResponse.json({ success: false, error: "Message" }, { status: 400 })
 ```
 
+### Seed Endpoints
+
+- **`POST /api/admin/projects/seed`**: inserts the landing-page case studies from `lib/landing-projects.ts`. Admin-auth guarded, **idempotent** — rows whose slug already exists are skipped so clicking twice never duplicates or overwrites edits
+- **`Project.longDescription` packs landing fields**: the table has no case-study columns, so `category` / `duration` / `results` are JSON-encoded with `encodeLandingMeta()` and read with `decodeLandingMeta()` (plain text → no extras, malformed JSON → no extras, never throws)
+- **Case-study link** lives in `Project.demoUrl`; **sort order** in `Project.sortOrder` (seed uses 10/20/30)
+
 ## Error Handling
 
 ### Global Error Handling
@@ -147,12 +153,38 @@ NextResponse.json({ success: false, error: "Message" }, { status: 400 })
 
 ## Styling Conventions
 
+### Theme Tokens (site-wide, single source of truth)
+
+All colors flow from CSS variables in `app/globals.css`. **Never hardcode brand
+colors** (`#3498db`, `#2563eb`, `amber-*`, `blue-*`, `gray-*` chrome) — use tokens.
+
+| Token (CSS var) | Tailwind utility | Light | Dark | Use |
+| ---- | ---- | ---- | ---- | ---- |
+| `--bg` / `--background` | `bg-background` | `#f6f8fc` | `#0a0e1a` | page background |
+| `--surface` / `--card` | `bg-surface`, `bg-card` | `#ffffff` | `#121829` | cards, panels, **dialogs/modals/sheets** |
+| `--line` / `--border` | `border-border`, `border-line` | `#dbe2f0` | `#1f2942` | all borders |
+| `--text` / `--foreground` | `text-foreground` | `#0b1222` | `#e6ecf8` | headings + body text |
+| `--muted-text` | `text-muted-foreground` | `#55627f` | `#8a96b3` | secondary text |
+| `--a` / `--primary` | `text-primary`, `bg-primary` | `#0891b2` | `#22d3ee` | brand cyan |
+| `--b` / `--secondary` | `text-secondary`, `bg-secondary` | `#6d4aff` | `#8b6cff` | brand purple |
+| `--muted` | `bg-muted` | `#eef2f9` | `#1a2135` | subtle fills |
+| `--glow` | `shadow-[0_14px_34px_var(--glow)]`, `bg-glow` | cyan 12% | cyan 14% | hover glow, radial accents |
+| `--ring` / `--input` | `ring-ring`, `border-input` | cyan | cyan | focus + inputs |
+
+- **Brand gradient**: `bg-gradient-to-br from-primary to-secondary` (primary buttons) or the `text-gradient` utility for gradient text.
+- **Fonts**: body = Space Grotesk (`font-sans`), code/eyebrows/labels = JetBrains Mono (`font-mono`), loaded via `<link>` in `app/layout.tsx`.
+- **Dark mode** via next-themes (`.dark` class on `<html>`, `defaultTheme="system"`); tokens are defined for both modes.
+- Element defaults (`h1`–`h6`, `body`, `*`) live in `@layer base` in `globals.css` so utility classes can override them.
+
+### General
+
 - **Tailwind CSS v4 utility classes**: Primary styling approach
 - **Custom CSS**: Only when Tailwind cannot achieve the effect; kept minimal
 - **CSS variables**: Used for colors, spacing, and typography (per `components.json` config)
 - **Responsive**: `sm`, `md`, `lg`, `xl`, `2xl` breakpoints used consistently
-- **Dark mode**: `dark:` variants enabled via `next-themes` and Tailwind config
+- **Dark mode**: `.dark` class via `next-themes`; all colors must be token-based so both modes work
 - **Component styling**: shadcn/ui components use `cn()` for variant classes
+- **Modals/dialogs**: `Dialog`, `AlertDialog`, `Sheet`, `Drawer` content uses `bg-surface` (opaque) — never rely on `bg-background` for floating panels
 
 ## Comments/Documentation Conventions
 

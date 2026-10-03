@@ -8,19 +8,23 @@ The project follows a **full-stack Next.js 15** architecture with a hybrid App R
 
 ### App Router Structure (`app/`)
 
-- **`app/(main)/`**: Public-facing pages (about, contact, portfolio, services, docs)
-- **`app/(admin)/`**: Admin dashboard with authenticated routes
-- **`app/layout.tsx`**: Root layout with metadata, `NextThemes` for dark/mode support
+- **`app/(main)/`**: Public-facing pages (about, contact, portfolio, services, docs) + site chrome (`Header`, `main`, `Footer`, widgets) in its layout
+- **`app/(admin)/`**: Admin dashboard with authenticated routes (own layout: sidebar + header shell)
+- **`app/layout.tsx`**: Root layout — the **only** place that renders `<html>`/`<body>`; hosts `ThemeProvider`, `Toaster`, `LoadingProvider` and the Google Fonts links (Space Grotesk / JetBrains Mono)
+- **`app/(main)/layout.tsx`**: Page metadata (title template, keywords) + site chrome only — no providers or `<html>`/`<body>` (nested layouts must not re-render them)
 - **`app/loading.tsx`**: Loading skeletons for route transitions
-- **`app/globals.css`**: Global Tailwind CSS v4 styles
+- **`app/globals.css`**: Global Tailwind CSS v4 styles + the site-wide theme tokens (see `context/coding-standards.md` → Styling Conventions)
 
 ### Key Frontend Patterns
 
 - **Server Components** (default): Data fetching via Prisma directly in components
 - **Client Components**: Marked with `"use client"` for interactivity (chat, forms, editor)
-- **Next-themes**: System preference-based dark/light mode switching
-- **shadcn/ui components**: All UI built on Radix UI primitives + Tailwind CSS
-- **Tailwind CSS v4**: Utility-first styling; `tailwind-merge` for conditional classes
+- **Next-themes**: System preference-based dark/light mode switching (`.dark` class on `<html>`)
+- **shadcn/ui components**: All UI built on Radix UI primitives + Tailwind CSS; dialogs/sheets/drawers use `bg-surface` for an opaque panel background
+- **Tailwind CSS v4**: Utility-first styling; `tailwind-merge` for conditional classes; CSS-first config via `@theme inline` (no `tailwind.config.*`)
+- **Landing page composition**: `app/(main)/page.tsx` renders `HeroSection → TechnologyStack → ServicesSection → CaseStudiesSection → ProcessSection → TestimonialSection → CTASection` (section anchors `#services`, `#work`, `#process`, `#contact`)
+- **Landing case studies are dynamic**: `app/(main)/page.tsx` is `dynamic = "force-dynamic"` and maps active `Project` rows (`Project.findActive()` → whitelisted `project.findMany`, no raw SQL) through `lib/landing-projects.ts`. If the DB relay is unreachable it falls back to the `landingProjects` seed object so `#work` never blanks; a working-but-empty table renders the section header with no cards
+- **Seeding**: admin dashboard → *Projects* → "Seed Landing Projects" button calls `POST /api/admin/projects/seed`, which inserts `lib/landing-projects.ts` (idempotent: existing slugs are skipped)
 
 ### Pages Router Legacy (`pages/`)
 

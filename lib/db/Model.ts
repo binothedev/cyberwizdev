@@ -217,6 +217,11 @@ export class Model {
     return this.data[column];
   }
 
+  /** Row primary key — sugar for `get("id")` (every table has an `id` column). */
+  get id(): unknown {
+    return this.get("id");
+  }
+
   set(column: string, value: unknown): this {
     this.data[column] = value;
     return this;

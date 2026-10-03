@@ -337,7 +337,7 @@ function relay_query_registry(): array
 
         // Projects
         'project.create' => [
-            'sql' => 'INSERT INTO Project (id, title, slug, description, longDescription, image, githubUrl, demoUrl, status, sortOrder) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            'sql' => 'INSERT INTO Project (id, title, slug, description, longDescription, image, githubUrl, demoUrl, status, sortOrder, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(3), NOW(3))',
             'params' => ['id', 'title', 'slug', 'description', 'longDescription', 'image', 'githubUrl', 'demoUrl', 'status', 'sortOrder'],
         ],
         'project.update' => [

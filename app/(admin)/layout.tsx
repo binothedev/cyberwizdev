@@ -1,4 +1,3 @@
-import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import AdminSidebar from "@/components/admin/admin-sidebar";
 import AdminHeader from "@/components/admin/admin-header";
@@ -17,7 +16,7 @@ export default async function AdminLayout({
   const session = await auth();
 
   return (
-    <div className="flex h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="flex h-screen bg-background text-foreground">
       {/* Desktop sidebar */}
       <div className="hidden md:block">
         <AdminSidebar />

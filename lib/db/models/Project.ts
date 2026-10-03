@@ -45,4 +45,16 @@ export class Project extends Model {
   get updatedAt(): Date {
     return new Date(String(this.get("updatedAt")));
   }
+
+  /**
+   * Active projects in landing-page order.
+   *
+   * Goes through the whitelisted `project.findMany` relay query instead of
+   * Model.findMany (which builds raw SQL), so it also works when
+   * RELAY_ALLOW_RAW_SQL is disabled on the relay.
+   */
+  static async findActive(): Promise<Project[]> {
+    const result = await this.run("findMany", { status: "active" });
+    return result.rows.map((row) => this.hydrate(row));
+  }
 }

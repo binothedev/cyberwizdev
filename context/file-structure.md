@@ -109,6 +109,7 @@ The primary source directory using the App Router pattern (Next.js 13+).
 - **Key Files**:
   - **Server actions**: Business logic for contact forms, newsletter, etc.
   - **Utilities**: Date formatting, validation helpers, format functions
+  - **`landing-projects.ts`**: Seed object for the landing page case studies + JSON encode/decode for the fields packed into `Project.longDescription`
   - **Prisma client**: Configured and exported from this directory
 - **Path alias**: `@/lib/*` resolves to this directory
 
@@ -155,6 +156,7 @@ The primary source directory using the App Router pattern (Next.js 13+).
 - **Key scripts** (from `package.json`):
   - `create-admin`: Script to create admin user account
   - Any one-off data migration or seeding scripts
+- **`verify-landing-seed.ts`**: `npx tsx scripts/verify-landing-seed.ts` — round-trip check that landing case studies survive the seed → `Project` row → card path (JSON in `longDescription`, plain text, null, malformed)
 
 ## `package.json` and Configuration
 

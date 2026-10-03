@@ -53,7 +53,7 @@ const supportChannels = [
     title: "Email Support",
     description: "Send us detailed questions and get comprehensive answers",
     icon: Mail,
-    color: "from-blue-500 to-cyan-400",
+    color: "from-primary to-secondary",
     availability: "Mon - Fri, 9AM - 6PM",
     responseTime: "< 24 hours",
     bestFor: "Complex technical issues",
@@ -130,14 +130,14 @@ const supportResources = [
     title: "Knowledge Base",
     description: "Comprehensive articles and tutorials",
     icon: Book,
-    color: "bg-blue-100 text-blue-600",
+    color: "bg-primary/10 text-primary",
     count: "200+ articles",
   },
   {
     title: "Video Tutorials",
     description: "Step-by-step video guides",
     icon: Video,
-    color: "bg-purple-100 text-purple-600",
+    color: "bg-secondary/10 text-secondary",
     count: "50+ videos",
   },
   {
@@ -158,7 +158,7 @@ const supportResources = [
 
 export default function Support() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100">
+    <div className="min-h-screen bg-background">
       {/* Hero Section */}
       <section className="relative pt-20 pb-32 overflow-hidden">
         <div className="absolute inset-0">
@@ -169,26 +169,26 @@ export default function Support() {
             className="object-cover scale-105"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-900/95 via-slate-800/85 to-slate-900/95"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-background/95 via-background/85 to-background/95"></div>
         </div>
 
         <div className="relative max-w-7xl mx-auto px-6 pt-16">
           <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-flex items-center px-6 py-3 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 mb-8">
-              <Headphones className="h-5 w-5 text-[#3498db] mr-2" />
-              <span className="text-white/90 font-medium">
+            <div className="inline-flex items-center px-6 py-3 rounded-full bg-surface/70 backdrop-blur-sm border border-border mb-8">
+              <Headphones className="h-5 w-5 text-primary mr-2" />
+              <span className="text-foreground font-medium">
                 24/7 Support Available
               </span>
             </div>
 
-            <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
+            <h1 className="text-5xl md:text-7xl font-bold text-foreground mb-6 leading-tight">
               How Can We
-              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[#3498db] to-cyan-400">
+              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">
                 Help You?
               </span>
             </h1>
 
-            <p className="text-xl text-white/80 max-w-3xl mx-auto mb-12">
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-12">
               Our dedicated support team is here to help you succeed. Get
               answers, solve problems, and accelerate your development.
             </p>
@@ -196,11 +196,11 @@ export default function Support() {
             {/* Search Bar */}
             <div className="max-w-2xl mx-auto">
               <div className="relative">
-                <Search className="absolute left-4 top-4 h-5 w-5 text-slate-400" />
+                <Search className="absolute left-4 top-4 h-5 w-5 text-muted-foreground" />
                 <input
                   type="text"
                   placeholder="Search for help articles..."
-                  className="w-full pl-12 pr-4 py-4 bg-white/90 backdrop-blur-sm border border-white/20 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#3498db] text-slate-800 placeholder-slate-500"
+                  className="w-full pl-12 pr-4 py-4 bg-surface/90 backdrop-blur-sm border border-border rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary text-foreground placeholder-muted-foreground"
                 />
               </div>
             </div>
@@ -215,7 +215,7 @@ export default function Support() {
             {supportChannels.map((channel) => (
               <Card
                 key={channel.title}
-                className="group border-0 shadow-xl overflow-hidden bg-white hover:shadow-2xl transition-all duration-500 hover:-translate-y-2"
+                className="group border-0 shadow-xl overflow-hidden bg-surface hover:shadow-2xl transition-all duration-500 hover:-translate-y-2"
               >
                 <CardContent className="p-0">
                   <div
@@ -231,28 +231,28 @@ export default function Support() {
                   <div className="p-6">
                     <div className="space-y-3 mb-6">
                       <div className="flex justify-between">
-                        <span className="text-sm text-slate-600">
+                        <span className="text-sm text-muted-foreground">
                           Availability:
                         </span>
-                        <span className="text-sm font-medium text-slate-800">
+                        <span className="text-sm font-medium text-foreground">
                           {channel.availability}
                         </span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-sm text-slate-600">
+                        <span className="text-sm text-muted-foreground">
                           Response:
                         </span>
-                        <span className="text-sm font-medium text-slate-800">
+                        <span className="text-sm font-medium text-foreground">
                           {channel.responseTime}
                         </span>
                       </div>
                       <div className="pt-2">
-                        <p className="text-sm text-slate-600">
+                        <p className="text-sm text-muted-foreground">
                           {channel.bestFor}
                         </p>
                       </div>
                     </div>
-                    <Button className="w-full bg-[#3498db] hover:bg-[#2980b9]">
+                    <Button className="w-full bg-primary hover:bg-primary/90">
                       Get Help Now
                     </Button>
                   </div>
@@ -264,16 +264,16 @@ export default function Support() {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-24 bg-slate-50">
+      <section className="py-24 bg-muted">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
-            <div className="inline-flex items-center px-4 py-2 rounded-full bg-[#3498db]/10 text-[#3498db] font-medium text-sm mb-4">
+            <div className="inline-flex items-center px-4 py-2 rounded-full bg-primary/10 text-primary font-medium text-sm mb-4">
               Frequently Asked
             </div>
-            <h2 className="text-4xl font-bold text-slate-800 mb-4">
+            <h2 className="text-4xl font-bold text-foreground mb-4">
               Common Questions
             </h2>
-            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Quick answers to the questions we hear most often.
             </p>
           </div>
@@ -286,12 +286,12 @@ export default function Support() {
               >
                 <CardContent className="p-8">
                   <div className="flex items-center mb-6">
-                    <category.icon className="h-8 w-8 text-[#3498db] mr-3" />
+                    <category.icon className="h-8 w-8 text-primary mr-3" />
                     <div>
-                      <h3 className="text-lg font-bold text-slate-800">
+                      <h3 className="text-lg font-bold text-foreground">
                         {category.title}
                       </h3>
-                      <span className="text-sm text-slate-500">
+                      <span className="text-sm text-muted-foreground">
                         {category.count} questions
                       </span>
                     </div>
@@ -301,7 +301,7 @@ export default function Support() {
                     {category.questions.map((question) => (
                       <div
                         key={question}
-                        className="text-slate-600 hover:text-[#3498db] transition-colors cursor-pointer text-sm"
+                        className="text-muted-foreground hover:text-primary transition-colors cursor-pointer text-sm"
                       >
                         {question}
                       </div>
@@ -318,10 +318,10 @@ export default function Support() {
       <section className="py-24">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-slate-800 mb-4">
+            <h2 className="text-4xl font-bold text-foreground mb-4">
               Self-Service Resources
             </h2>
-            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Find answers and learn at your own pace with our comprehensive
               resources.
             </p>
@@ -339,11 +339,11 @@ export default function Support() {
                   >
                     <resource.icon className="h-8 w-8" />
                   </div>
-                  <h3 className="text-xl font-bold text-slate-800 mb-3">
+                  <h3 className="text-xl font-bold text-foreground mb-3">
                     {resource.title}
                   </h3>
-                  <p className="text-slate-600 mb-4">{resource.description}</p>
-                  <div className="text-sm text-[#3498db] font-medium mb-6">
+                  <p className="text-muted-foreground mb-4">{resource.description}</p>
+                  <div className="text-sm text-primary font-medium mb-6">
                     {resource.count}
                   </div>
                   <Button variant="outline" size="sm" className="group">
@@ -359,13 +359,13 @@ export default function Support() {
 
       {/* Contact CTA */}
       <section className="relative py-24 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900"></div>
+        <div className="absolute inset-0 bg-surface"></div>
 
         <div className="relative max-w-4xl mx-auto px-6 text-center">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+          <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
             Still Need Help?
           </h2>
-          <p className="text-xl text-white/80 mb-12 max-w-2xl mx-auto">
+          <p className="text-xl text-muted-foreground mb-12 max-w-2xl mx-auto">
             Our support team is standing by to help you resolve any issues and
             get back to building amazing applications.
           </p>
@@ -373,7 +373,7 @@ export default function Support() {
           <div className="flex flex-col sm:flex-row gap-6 justify-center">
             <Button
               size="lg"
-              className="bg-gradient-to-r from-[#3498db] to-cyan-400 hover:shadow-xl hover:shadow-[#3498db]/25 transition-all duration-300 px-8 py-4 text-lg"
+              className="transition-all duration-300 px-8 py-4 text-lg hover:shadow-[0_14px_34px_var(--glow)]"
             >
               Contact Support Team
             </Button>
@@ -381,7 +381,7 @@ export default function Support() {
             <Button
               size="lg"
               variant="outline"
-              className="border-white/20 text-white hover:bg-white/10 backdrop-blur-sm px-8 py-4 text-lg"
+              className="px-8 py-4 text-lg"
             >
               Schedule a Call
             </Button>

@@ -23,8 +23,14 @@ const Link = ({ href, onClick, children, className, ...props }: LinkProps) => {
       onClick(event);
     }
 
-    // Don't start loading if the link maps to current pathname
-    const targetPath = typeof href === 'string' ? href : href.pathname || '';
+    // In-page anchors (#section) never change the route — no loading overlay
+    if (typeof href === 'string' && (href.startsWith('#') || href === pathname)) {
+      return;
+    }
+
+    // Don't start loading if the link maps to current pathname (ignoring hash)
+    const targetPath =
+      typeof href === 'string' ? href.split('#')[0] : href.pathname || '';
     if (targetPath === pathname) {
       return;
     }
